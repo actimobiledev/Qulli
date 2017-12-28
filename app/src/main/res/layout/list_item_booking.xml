@@ -1,62 +1,263 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="@dimen/activity_margin_extra_small"
+    card_view:cardCornerRadius="@dimen/cardview_default_radius"
+    card_view:cardElevation="@dimen/cardview_elevation">
 
-    <RelativeLayout
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:paddingLeft="@dimen/activity_margin">
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv1"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:text="Rahul Jain"
-            android:textColor="@color/primary_text2"
-            android:textSize="@dimen/text_size_large"
-            android:textStyle="bold"
-            android:visibility="visible" />
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="@dimen/activity_margin">
 
-        <TextView
-            android:id="@+id/tv2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/tv1"
-            android:layout_gravity="center"
-            android:text="Actiknow Business Consulting"
-            android:textColor="@color/secondary_text2"
-            android:textSize="@dimen/text_size_extra_small"
-            android:visibility="visible" />
+            <RelativeLayout
+                android:id="@+id/rlClientInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/tv3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv2"
-            android:layout_gravity="center"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:text="Status"
-            android:textColor="@color/secondary_text2"
-            android:textSize="@dimen/text_size_extra_small"
-            android:visibility="visible" />
+                <TextView
+                    android:id="@+id/tvBookingId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:text="Booking Id : 89"
+                    android:textColor="@color/primary_text2"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    android:paddingTop="@dimen/activity_margin_small"/>
 
+                <TextView
+                    android:id="@+id/tvBookingStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/tvBookingId"
+                    android:layout_gravity="center"
+                    android:text="Pickup"
+                    android:textColor="@color/secondary_text2"
+                    android:textSize="@dimen/text_size_extra_small"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tvClientName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/tvBookingStatus"
+                    android:layout_gravity="center"
+                    android:text="Actiknow Business Consulting"
+                    android:textColor="@color/secondary_text2"
+                    android:textSize="@dimen/text_size_extra_small"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tvEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvClientName"
+                    android:layout_gravity="center"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:text="rahul.badkul@gmail.com"
+                    android:textColor="@color/secondary_text2"
+                    android:textSize="@dimen/text_size_extra_small"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tvPhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvEmail"
+                    android:layout_gravity="center"
+                    android:maxEms="10"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:text="963698745"
+                    android:textColor="@color/secondary_text2"
+                    android:textSize="@dimen/text_size_extra_small"
+                    android:visibility="visible" />
+
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llPickDropInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rlClientInfo"
+                android:layout_marginTop="@dimen/activity_margin_extra_small"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+
+                <RelativeLayout
+                    android:id="@+id/rlPickUpInfo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvPickup"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1">
+
+
+                    <TextView
+                        android:id="@+id/tvPickup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:text="PickUp :"
+                        android:textColor="@color/primary_text2"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textStyle="bold"
+                        android:visibility="visible" />
+
+
+                    <TextView
+                        android:id="@+id/tvPickUpAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/tvPickup"
+                        android:layout_gravity="center"
+                        android:text="Actiknow Business Consultin"
+                        android:textColor="@color/secondary_text2"
+                        android:textSize="@dimen/text_size_extra_small"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/tvPickUpDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvPickUpAddress"
+                        android:layout_gravity="center"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:text="10:40 - 12:40"
+                        android:textColor="@color/secondary_text2"
+                        android:textSize="@dimen/text_size_extra_small"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/tvPickuptime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvPickUpDate"
+                        android:layout_gravity="center"
+                        android:maxEms="10"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:text="963698745"
+                        android:textColor="@color/secondary_text2"
+                        android:textSize="@dimen/text_size_extra_small"
+                        android:visibility="visible" />
+
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/rlDropInfo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvPickup"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/activity_margin">
+
+
+                    <TextView
+                        android:id="@+id/tvDropOff"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:text="Drop Off :"
+                        android:textColor="@color/primary_text2"
+                        android:textSize="@dimen/text_size_medium"
+                        android:textStyle="bold"
+                        android:visibility="visible" />
+
+
+                    <TextView
+                        android:id="@+id/tvDropUpAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/tvDropOff"
+                        android:layout_gravity="center"
+                        android:text="Actiknow Business Consulting"
+                        android:textColor="@color/secondary_text2"
+                        android:textSize="@dimen/text_size_extra_small"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/tvDropUpDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvDropUpAddress"
+                        android:layout_gravity="center"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:text="10:40 - 12:40"
+                        android:textColor="@color/secondary_text2"
+                        android:textSize="@dimen/text_size_extra_small"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/tvDropuptime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvDropUpDate"
+                        android:layout_gravity="center"
+                        android:maxEms="10"
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:text="963698745"
+                        android:textColor="@color/secondary_text2"
+                        android:textSize="@dimen/text_size_extra_small"
+                        android:visibility="visible" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvNoOfItems"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/llPickDropInfo"
+                android:layout_marginTop="@dimen/activity_margin_extra_small"
+                android:text="No Of Items :"
+                android:textColor="@color/primary_text2"
+                android:textSize="@dimen/text_size_medium"
+                android:textStyle="bold"
+                android:visibility="visible"
+                android:paddingBottom="@dimen/activity_margin_small"/>
+
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/ivAddAsset"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/activity_margin_small"
+            android:src="@drawable/ic_add"
+            android:visibility="visible" />
 
     </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/ivAdd"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="@dimen/activity_margin_small"
-        android:src="@drawable/ic_add" />
-
-</RelativeLayout>
+</android.support.v7.widget.CardView>

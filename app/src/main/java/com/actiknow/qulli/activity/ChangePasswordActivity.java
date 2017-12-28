@@ -218,7 +218,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     Map<String, String> params = new HashMap<>();
                     params.put (AppConfigTags.HEADER_API_KEY, Constants.api_key);
                     params.put (AppConfigTags.HEADER_DRIVER_LOGIN_KEY, userDetailsPref.getStringPref(ChangePasswordActivity.this, UserDetailsPref.DRIVER_LOGIN_KEY));
-                    Utils.showLog (Log.INFO, AppConfigTags.HEADERS_SENT_TO_THE_SERVER, "" + params, true);
+                    Utils.showLog (Log.INFO, AppConfigTags.HEADERS_SENT_TO_THE_SERVER, "" + params, false);
                     return params;
                 }
             };

@@ -40,7 +40,25 @@ public class AppConfigTags {
     public static final String OLD_PASSWORD = "old_password";
     public static final String NEW_PASSWORD = "new_password";
 
-    
+    public static final String BOOKINGS = "bookings";
+    public static final String BOOKING_ID = "booking_id";
+    public static final String BOOKING_STATUS = "booking_status";
+    public static final String CLIENT_NAME = "client_name";
+    public static final String CLIENT_EMAIL = "client_email";
+    public static final String CLIENT_PHONE = "client_phone";
+    public static final String NO_OF_ITEMS = "no_of_items";
+    public static final String PICKUP_DATE = "pickup_date";
+    public static final String PICKUP_LOCATION = "pickup_location";
+    public static final String PICKUP_TIME_START = "pickup_time_start";
+    public static final String PICKUP_TIME_END = "pickup_time_end";
+    public static final String DROP_DATE = "drop_date";
+    public static final String DROP_LOCATION = "drop_location";
+    public static final String DROP_TIME_START = "drop_time_start";
+    public static final String DROP_TIME_END = "drop_time_end";
+    public static final String NOTES = "notes";
+    public static final String COST = "cost";
+
+    public static final String BARCODE_VALUE = "barcode_value";
 
 }
 

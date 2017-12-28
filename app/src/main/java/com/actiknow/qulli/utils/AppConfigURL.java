@@ -7,6 +7,8 @@ public class AppConfigURL {
     public static  String Login= BASE_URL+"driver/login";
     public static  String FORGOT_PASSWORD= BASE_URL+"driver/forgot-password";
     public static  String FORGOT_CHANGE_PASSWORD= BASE_URL+"driver/change-password";
+    public static  String BOOKING= BASE_URL+"driver/bookings";
+    public static String SCAN_PRODUCT= BASE_URL+"driver/scan";
 
     
 
