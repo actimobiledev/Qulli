@@ -21,8 +21,9 @@ public class AppConfigTags {
     public static final String MESSAGE = "message";
     public static final String DATABASE_LOG = "DATABASE LOG";
     public static final String HEADER_API_KEY = "api-key";
-    public static final String HEADER_USER_LOGIN_KEY = "user-login-key";
-    
+    public static final String HEADER_DRIVER_LOGIN_KEY = "driver-login-key";
+
+
     public static final String MESSAGE_TEXT = "Message Text";
     
     
@@ -36,7 +37,8 @@ public class AppConfigTags {
     public static final String DRIVER_ID = "driver_id";
     public static final String DRIVER_NAME = "driver_name";
     public static final String DRIVER_EMAIL = "driver_email";
-    public static final String DRIVER_LOGIN_KEY = "driver_login_key";
+    public static final String OLD_PASSWORD = "old_password";
+    public static final String NEW_PASSWORD = "new_password";
 
     
 

@@ -14,7 +14,7 @@ public class Constants {
     public static double latitude = 0.0;
     public static double longitude = 0.0;
     public static int splash_screen_first_time = 0; // 0 => default
-    public static boolean show_log = false;
+    public static boolean show_log = true;
     public static String server_time = "";
     public static String location_tagging_start_time = "08:00";
     public static String location_tagging_end_time = "20:00";
