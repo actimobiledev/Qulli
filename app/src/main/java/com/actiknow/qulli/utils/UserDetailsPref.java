@@ -9,6 +9,7 @@ public class UserDetailsPref {
     public static final String DRIVER_NAME = "driver_name";
     public static final String DRIVER_EMAIL = "driver_email";
     public static final String DRIVER_LOGIN_KEY = "driver_login_key";
+    public static final String RESPONSE = "response";
     private static UserDetailsPref userDetailsPref;
     private String USER_DETAILS = "USER_DETAILS";
     

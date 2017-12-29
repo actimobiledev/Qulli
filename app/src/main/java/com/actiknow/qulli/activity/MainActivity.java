@@ -150,7 +150,12 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                BookingList();
+                if (NetworkConnection.isNetworkAvailable (MainActivity.this)) {
+                    BookingList();
+                }else{
+                    OfflineBookingList();
+                }
+
 
             }
         });
@@ -185,7 +190,9 @@ public class MainActivity extends AppCompatActivity {
                         public void onResponse (String response) {
                             Utils.showLog (Log.INFO, AppConfigTags.SERVER_RESPONSE, response, true);
                             if (response != null) {
+                                userDetailsPref.putStringPref(MainActivity.this,UserDetailsPref.RESPONSE,response);
                                 try {
+
                                     JSONObject jsonObj = new JSONObject (response);
                                     boolean is_error = jsonObj.getBoolean (AppConfigTags.ERROR);
                                     String message = jsonObj.getString (AppConfigTags.MESSAGE);
@@ -273,6 +280,49 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void OfflineBookingList () {
+        bookingList.clear();
+
+        try {
+
+            JSONObject jsonObj = new JSONObject (userDetailsPref.getStringPref(MainActivity.this,UserDetailsPref.RESPONSE));
+            boolean is_error = jsonObj.getBoolean (AppConfigTags.ERROR);
+            String message = jsonObj.getString (AppConfigTags.MESSAGE);
+            if (! is_error) {
+                swipeRefreshLayout.setRefreshing (false);
+                JSONArray jsonArrayBooking = jsonObj.getJSONArray (AppConfigTags.BOOKINGS);
+
+                for (int i = 0; i < jsonArrayBooking.length (); i++) {
+                    JSONObject jsonObjectBooking = jsonArrayBooking.getJSONObject (i);
+                    Booking booking = new Booking (
+                            jsonObjectBooking.getInt (AppConfigTags.BOOKING_ID),
+                            jsonObjectBooking.getString (AppConfigTags.BOOKING_STATUS),
+                            jsonObjectBooking.getString (AppConfigTags.CLIENT_NAME),
+                            jsonObjectBooking.getString (AppConfigTags.CLIENT_EMAIL),
+                            jsonObjectBooking.getString (AppConfigTags.CLIENT_PHONE),
+                            jsonObjectBooking.getString (AppConfigTags.PICKUP_LOCATION),
+                            jsonObjectBooking.getString (AppConfigTags.PICKUP_DATE),
+                            jsonObjectBooking.getString (AppConfigTags.PICKUP_TIME_START),
+                            jsonObjectBooking.getString (AppConfigTags.PICKUP_TIME_END),
+                            jsonObjectBooking.getString (AppConfigTags.DROP_LOCATION),
+                            jsonObjectBooking.getString (AppConfigTags.DROP_DATE),
+                            jsonObjectBooking.getString (AppConfigTags.DROP_TIME_START),
+                            jsonObjectBooking.getString (AppConfigTags.DROP_TIME_END),
+                            jsonObjectBooking.getInt (AppConfigTags.NO_OF_ITEMS),
+                            jsonObjectBooking.getString (AppConfigTags.NOTES),
+                            jsonObjectBooking.getString (AppConfigTags.COST),
+                            jsonObjectBooking.getJSONArray (AppConfigTags.ASSETS).toString()
+                    );
+                    bookingList.add (i, booking);
+                }
+                bookingAdapter.notifyDataSetChanged ();
+            }
+        } catch (Exception e) {
+            e.printStackTrace ();
+            Utils.showSnackBar (MainActivity.this, clMain, getResources ().getString (R.string.snackbar_text_exception_occurred), Snackbar.LENGTH_LONG, getResources ().getString (R.string.snackbar_action_dismiss), null);
+
+        }
+    }
 
     private void initDrawer() {
         IProfile profile = new IProfile() {
