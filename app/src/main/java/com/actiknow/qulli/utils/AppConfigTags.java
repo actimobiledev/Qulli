@@ -59,6 +59,10 @@ public class AppConfigTags {
     public static final String COST = "cost";
 
     public static final String BARCODE_VALUE = "barcode_value";
+    public static final String ASSETS = "assets";
+    public static final String AVAILABLE_STATUS = "available_status";
+    public static final String STATUS_ID = "status_id";
+    public static final String STATUS_TEXT = "status_text";
 
 }
 

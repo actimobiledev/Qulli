@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -17,7 +18,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
     private Barcode barcodeResult;
     TextView tvScan;
     ProgressDialog progressDialog;
+    ImageView ivNavigation;
 
 
     private AccountHeader headerResult = null;
@@ -105,7 +106,13 @@ public class MainActivity extends AppCompatActivity {
         initListener();
         isLogin();
         initDrawer();
+
+    }
+
+    @Override
+    protected void onResume() {
         BookingList();
+        super.onResume();
     }
 
     private void isLogin() {
@@ -122,9 +129,11 @@ public class MainActivity extends AppCompatActivity {
         rvBooking=(RecyclerView)findViewById(R.id.rvBooking);
         swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.swipeRefresh);
         tvScan = (TextView)findViewById(R.id.tvScan);
+        ivNavigation=(ImageView)findViewById(R.id.ivNavigation);
     }
 
     private void initData() {
+        swipeRefreshLayout.setRefreshing(true);
         userDetailsPref = UserDetailsPref.getInstance();
         progressDialog = new ProgressDialog(this);
 
@@ -145,6 +154,12 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        ivNavigation.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick (View view) {
+                result.openDrawer ();
+            }
+        });
 
         tvScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,8 +174,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void BookingList () {
+        swipeRefreshLayout.setRefreshing(true);
         if (NetworkConnection.isNetworkAvailable (MainActivity.this)) {
             bookingList.clear ();
+
             Utils.showLog (Log.INFO, AppConfigTags.URL, AppConfigURL.BOOKING, true);
             StringRequest strRequest = new StringRequest (Request.Method.GET, AppConfigURL.BOOKING,
                     new Response.Listener<String> () {
@@ -192,9 +209,10 @@ public class MainActivity extends AppCompatActivity {
                                                      jsonObjectBooking.getString (AppConfigTags.DROP_DATE),
                                                      jsonObjectBooking.getString (AppConfigTags.DROP_TIME_START),
                                                      jsonObjectBooking.getString (AppConfigTags.DROP_TIME_END),
-                                                     jsonObjectBooking.getString (AppConfigTags.NO_OF_ITEMS),
+                                                     jsonObjectBooking.getInt (AppConfigTags.NO_OF_ITEMS),
                                                      jsonObjectBooking.getString (AppConfigTags.NOTES),
-                                                     jsonObjectBooking.getString (AppConfigTags.COST)
+                                                     jsonObjectBooking.getString (AppConfigTags.COST),
+                                                     jsonObjectBooking.getJSONArray (AppConfigTags.ASSETS).toString()
                                             );
                                             bookingList.add (i, booking);
                                         }
@@ -242,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
                     return params;
                 }
             };
-            Utils.sendRequest (strRequest, 5);
+            Utils.sendRequest (strRequest, 30);
         } else {
             Utils.showSnackBar (MainActivity.this, clMain, getResources ().getString (R.string.snackbar_text_no_internet_connection_available), Snackbar.LENGTH_LONG, getResources ().getString (R.string.snackbar_action_go_to_settings), new View.OnClickListener () {
                 @Override
@@ -531,6 +549,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+
 
     private void getScannedData (final String scan_value) {
         if (NetworkConnection.isNetworkAvailable (MainActivity.this)) {

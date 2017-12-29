@@ -5,13 +5,16 @@ package com.actiknow.qulli.model;
  */
 
 public class Booking {
-    int booking_id;
+    int booking_id, number_of_item;
     String booking_status,client_name,client_email,client_phone,
     pickup_date, pickup_address, pickup_time_start, pickup_time_end, drop_address, drop_date, drop_time_start,
-    drop_time_end, number_of_item,notes,cost;
+    drop_time_end,notes,cost,asset;
 
 
-    public Booking(int booking_id, String booking_status, String client_name, String client_email, String client_phone, String pickup_address, String pickup_date, String pickup_time_start, String pickup_time_end, String drop_address, String drop_date, String drop_time_start, String drop_time_end,String number_of_item, String notes, String cost) {
+    public Booking(int booking_id, String booking_status, String client_name, String client_email, String client_phone,
+                   String pickup_address, String pickup_date, String pickup_time_start, String pickup_time_end,
+                   String drop_address, String drop_date, String drop_time_start, String drop_time_end,int number_of_item,
+                   String notes, String cost, String asset) {
         this.booking_id = booking_id;
         this.booking_status = booking_status;
         this.client_name = client_name;
@@ -28,6 +31,15 @@ public class Booking {
         this.drop_time_end = drop_time_end;
         this.notes = notes;
         this.cost = cost;
+        this.asset = asset;
+    }
+
+    public String getAsset() {
+        return asset;
+    }
+
+    public void setAsset(String asset) {
+        this.asset = asset;
     }
 
     public Booking() {
@@ -73,11 +85,11 @@ public class Booking {
         this.client_phone = client_phone;
     }
 
-    public String getNumber_of_item() {
+    public int getNumber_of_item() {
         return number_of_item;
     }
 
-    public void setNumber_of_item(String number_of_item) {
+    public void setNumber_of_item(int number_of_item) {
         this.number_of_item = number_of_item;
     }
 

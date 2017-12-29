@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.actiknow.qulli.R;
@@ -47,6 +48,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
     EditText etNewPassword;
     EditText etConfirmPassword;
     TextView tvSubmit;
+    RelativeLayout rlBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,11 +76,21 @@ public class ChangePasswordActivity extends AppCompatActivity {
         etOldPassword = (EditText) findViewById(R.id.etOldPassword);
         etConfirmPassword = (EditText) findViewById(R.id.etConfirmPassword);
         tvSubmit=(TextView)findViewById(R.id.buttonUpload);
+        rlBack=(RelativeLayout)findViewById(R.id.rlBack);
 
 
     }
 
     private void initListener() {
+        rlBack.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick (View v) {
+                finish ();
+                overridePendingTransition (R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+        });
+
+
         etNewPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {

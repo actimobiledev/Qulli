@@ -2,6 +2,8 @@ package com.actiknow.qulli.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.provider.Settings;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -11,11 +13,28 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actiknow.qulli.R;
+import com.actiknow.qulli.activity.LoginActivity;
+import com.actiknow.qulli.activity.MainActivity;
 import com.actiknow.qulli.model.Booking;
+import com.actiknow.qulli.utils.AppConfigTags;
+import com.actiknow.qulli.utils.AppConfigURL;
+import com.actiknow.qulli.utils.Constants;
+import com.actiknow.qulli.utils.NetworkConnection;
 import com.actiknow.qulli.utils.Utils;
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScanner;
+import com.edwardvanraak.materialbarcodescanner.MaterialBarcodeScannerBuilder;
+import com.google.android.gms.vision.barcode.Barcode;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -29,6 +48,9 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
 
     private Activity activity;
     private List<Booking> bookingList = new ArrayList<Booking>();
+    int scanItem;
+    ProgressBar progressDialog;
+    private Barcode barcodeResult;
 
     public BookingAdapter(Activity activity, List<Booking> bookingList) {
         this.activity = activity;
@@ -45,29 +67,114 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
     @Override
     public void onBindViewHolder (final ViewHolder holder, int position) {//        runEnterAnimation (holder.itemView);
         final Booking booking = bookingList.get (position);
+        progressDialog=new ProgressBar(activity);
         Utils.setTypefaceToAllViews (activity, holder.tvBookingId);
         holder.tvBookingId.setText("Booking Id : "+booking.getBooking_id());
-        holder.tvBookingStatus.setText(booking.getBooking_status());
-        holder.tvClientName.setText(booking.getClient_name());
-        holder.tvEmail.setText(booking.getClient_email());
-        holder.tvPhone.setText(booking.getClient_phone());
+        holder.tvBookingStatus.setText("Current Status : "+booking.getBooking_status());
+        holder.tvClientName.setText("Name : "+booking.getClient_name());
+        holder.tvEmail.setText("Email : "+booking.getClient_email());
+        holder.tvPhone.setText("Phone : "+booking.getClient_phone());
         holder.tvPickUpAddress.setText(booking.getPickup_address());
         holder.tvPickUpDate.setText(booking.getPickup_date());
         holder.tvPickuptime.setText(booking.getPickup_time_start()+" - "+booking.getPickup_time_end());
         holder.tvDropUpAddress.setText(booking.getDrop_address());
         holder.tvDropUpDate.setText(booking.getDrop_date());
-        holder.tvDropuptime.setText(booking.getDrop_time_start()+"-"+booking.getDrop_time_end());
+        holder.tvDropuptime.setText(booking.getDrop_time_start()+" - "+booking.getDrop_time_end());
         holder.tvNoOfItems.setText("Number of Item : "+booking.getNumber_of_item());
 
+        try {
+            final JSONArray jsonArray= new JSONArray(booking.getAsset());
+            scanItem= jsonArray.length();
+            holder.tvNoOfItemsScan.setText("Item Scanned : "+scanItem);
+            holder.ivAddAsset.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (booking.getNumber_of_item()==jsonArray.length()) {
+                        Toast.makeText(activity, "Already Maximum number of item scanned.", Toast.LENGTH_LONG).show();
+                    } else {
+                        final MaterialBarcodeScanner materialBarcodeScanner = new MaterialBarcodeScannerBuilder()
+                                .withActivity (activity)
+                                .withEnableAutoFocus (true)
+                                .withBleepEnabled (true)
+                                .withBackfacingCamera ()
+                                .withCenterTracker ()
+                                .withText ("Place the barcode in center")
+                                //.withCenterTracker (R.drawable.barcode_scan_default, R.drawable.barcode_scan_pass)
+                                .withResultListener (new MaterialBarcodeScanner.OnResultListener () {
+                                    @Override
+                                    public void onResult (Barcode barcode) {
+                                        barcodeResult = barcode;
+                                        addAssetValue(String.valueOf(barcode.rawValue),booking.getBooking_id());
+                                    }
+                                })
+                                .build ();
+                        materialBarcodeScanner.startScan ();
 
+                    }
+                }
+            });
 
-        holder.ivAddAsset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-            }
-        });
+    }
+    private void addAssetValue (final String barcode, final int booking_id) {
+        if (NetworkConnection.isNetworkAvailable (activity)) {
+            Utils.showLog (Log.INFO, "" + AppConfigTags.URL, AppConfigURL.ADD_ASSET, true);
+            StringRequest strRequest1 = new StringRequest (Request.Method.POST, AppConfigURL.ADD_ASSET,
+                    new com.android.volley.Response.Listener<String> () {
+                        @Override
+                        public void onResponse (String response) {
+                            Utils.showLog (Log.INFO, AppConfigTags.SERVER_RESPONSE, response, true);
+                            if (response != null) {
+                                try {
+                                    JSONObject jsonObj = new JSONObject(response);
+                                    boolean error = jsonObj.getBoolean (AppConfigTags.ERROR);
+                                    String message = jsonObj.getString (AppConfigTags.MESSAGE);
+                                    if (! error) {
+                                        Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(activity, message, Toast.LENGTH_LONG).show();
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace ();
+                                }
+                            } else {
+                                Utils.showLog (Log.WARN, AppConfigTags.SERVER_RESPONSE, AppConfigTags.DIDNT_RECEIVE_ANY_DATA_FROM_SERVER, true);
+                            }
+                        }
+                    },
+                    new com.android.volley.Response.ErrorListener () {
+                        @Override
+                        public void onErrorResponse (VolleyError error) {
+                            Utils.showLog (Log.ERROR, AppConfigTags.VOLLEY_ERROR, error.toString (), true);
+                            NetworkResponse response = error.networkResponse;
+                            if (response != null && response.data != null) {
+                                Utils.showLog (Log.ERROR, AppConfigTags.ERROR, new String(response.data), true);
+                            }
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams () throws AuthFailureError {
+                    Map<String, String> params = new Hashtable<String, String>();
+                    params.put (AppConfigTags.BARCODE_VALUE, barcode);
+                    params.put (AppConfigTags.BOOKING_ID, String.valueOf(booking_id));
+                    Utils.showLog (Log.INFO, AppConfigTags.PARAMETERS_SENT_TO_THE_SERVER, "" + params, true);
+                    return params;
+                }
 
+                @Override
+                public Map<String, String> getHeaders () throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put (AppConfigTags.HEADER_API_KEY, Constants.api_key);
+                    Utils.showLog (Log.INFO, AppConfigTags.HEADERS_SENT_TO_THE_SERVER, "" + params, false);
+                    return params;
+                }
+            };
+            Utils.sendRequest (strRequest1, 60);
+        } else {
+        }
     }
 
     @Override
@@ -78,9 +185,6 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
     public void SetOnItemClickListener (final OnItemClickListener mItemClickListener) {
         this.mItemClickListener = mItemClickListener;
     }
-
-
-
     public interface OnItemClickListener {
         public void onItemClick (View view, int position);
     }
@@ -100,11 +204,9 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
         TextView tvDropUpDate;
         TextView tvDropuptime;
         TextView tvNoOfItems;
+        TextView tvNoOfItemsScan;
         ImageView ivAddAsset;
-
-        
         ProgressBar progressBar;
-        
         
         public ViewHolder (View view) {
             super (view);
@@ -122,6 +224,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
             tvDropUpDate=(TextView)view.findViewById(R.id.tvDropUpDate);
             tvDropuptime=(TextView)view.findViewById(R.id.tvDropuptime);
             tvNoOfItems=(TextView)view.findViewById(R.id.tvNoOfItems);
+            tvNoOfItemsScan=(TextView)view.findViewById(R.id.tvNoAsset);
             ivAddAsset=(ImageView)view.findViewById(R.id.ivAddAsset);
 
             view.setOnClickListener (this);
@@ -130,7 +233,6 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
         @Override
         public void onClick (View v) {
             final Booking jobDescription = bookingList.get (getLayoutPosition ());
-
             activity.overridePendingTransition (R.anim.slide_in_right, R.anim.slide_out_left);
             
             
