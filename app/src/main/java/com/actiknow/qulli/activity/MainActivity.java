@@ -36,6 +36,8 @@ import com.actiknow.qulli.utils.NetworkConnection;
 import com.actiknow.qulli.utils.SetTypeFace;
 import com.actiknow.qulli.utils.UserDetailsPref;
 import com.actiknow.qulli.utils.Utils;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -401,7 +403,8 @@ public class MainActivity extends AppCompatActivity {
 //                .withItemAnimator (new AlphaCrossFadeAnimator ())
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName("Dashboard").withIcon(FontAwesome.Icon.faw_tachometer).withIdentifier(1).withTypeface(SetTypeFace.getTypeface(MainActivity.this)).withSelectable(false),
-                        new PrimaryDrawerItem().withName("Change Password").withIcon(FontAwesome.Icon.faw_search).withIdentifier(2).withSelectable(false).withTypeface(SetTypeFace.getTypeface(MainActivity.this))
+                        new PrimaryDrawerItem().withName("Change Password").withIcon(FontAwesome.Icon.faw_search).withIdentifier(2).withSelectable(false).withTypeface(SetTypeFace.getTypeface(MainActivity.this)),
+                        new PrimaryDrawerItem().withName("Sign Out").withIcon(FontAwesome.Icon.faw_search).withIdentifier(3).withSelectable(false).withTypeface(SetTypeFace.getTypeface(MainActivity.this))
 
                 )
                 .withSavedInstance(savedInstanceState)
@@ -414,9 +417,8 @@ public class MainActivity extends AppCompatActivity {
                                 startActivity(intent2);
                                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                                 break;
-
                             case 3:
-                                //   showLogOutDialog ();
+                                   showLogOutDialog ();
                                 break;
                         }
                         return false;
@@ -426,9 +428,31 @@ public class MainActivity extends AppCompatActivity {
 //        result.getActionBarDrawerToggle ().setDrawerIndicatorEnabled (false);
     }
 
+    private void showLogOutDialog () {
+        MaterialDialog dialog = new MaterialDialog.Builder (this)
+                .limitIconToDefaultSize ()
+                .content ("Do you wish to Sign Out?")
+                .positiveText ("Yes")
+                .negativeText ("No")
+              
+                .typeface (SetTypeFace.getTypeface (MainActivity.this), SetTypeFace.getTypeface (MainActivity.this))
+                .onPositive (new MaterialDialog.SingleButtonCallback () {
+                    @Override
+                    public void onClick (@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        userDetailsPref.putStringPref(MainActivity.this, UserDetailsPref.DRIVER_NAME, "");
+                        userDetailsPref.putStringPref(MainActivity.this, UserDetailsPref.DRIVER_ID,"");
+                        userDetailsPref.putStringPref(MainActivity.this, UserDetailsPref.DRIVER_EMAIL,"");
+                        userDetailsPref.putStringPref(MainActivity.this, UserDetailsPref.DRIVER_LOGIN_KEY, "");
+                        Intent intent = new Intent (MainActivity.this, LoginActivity.class);
+                        intent.setFlags (Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity (intent);
+                        overridePendingTransition (R.anim.slide_in_left, R.anim.slide_out_right);
+                    }
+                }).build ();
+        dialog.show ();
+    }
+
     private void startScan () {
-
-
         final MaterialBarcodeScanner materialBarcodeScanner = new MaterialBarcodeScannerBuilder()
                 .withActivity (MainActivity.this)
                 .withEnableAutoFocus (true)

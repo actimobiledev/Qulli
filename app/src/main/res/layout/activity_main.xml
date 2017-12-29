@@ -22,7 +22,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:animateLayoutChanges="true"
-            android:background="@color/colorPrimary"
             android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
             app:contentInsetEnd="0dp"
             app:contentInsetLeft="0dp"
@@ -38,10 +37,11 @@
 
                 <ImageView
                     android:id="@+id/ivAppLogo"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_marginLeft="10dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@drawable/ic_drawer"
+                    />
 
                 <TextView
                     android:id="@+id/tvSearch"
