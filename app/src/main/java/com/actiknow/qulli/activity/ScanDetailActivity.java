@@ -1,0 +1,232 @@
+package com.actiknow.qulli.activity;
+
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+
+import com.actiknow.qulli.R;
+import com.actiknow.qulli.utils.AppConfigTags;
+import com.actiknow.qulli.utils.AppConfigURL;
+import com.actiknow.qulli.utils.Constants;
+import com.actiknow.qulli.utils.NetworkConnection;
+import com.actiknow.qulli.utils.UserDetailsPref;
+import com.actiknow.qulli.utils.Utils;
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+
+public class ScanDetailActivity extends AppCompatActivity {
+    UserDetailsPref userDetailsPref;
+
+    TextView tvBookingId;
+    TextView tvBookingStatus;
+    TextView tvClientName;
+    TextView tvEmail;
+    TextView tvPhone;
+    TextView tvPickup;
+    TextView tvPickUpAddress;
+    TextView tvPickUpDate;
+    TextView tvPickuptime;
+    TextView tvDropOff;
+    TextView tvDropUpAddress;
+    TextView tvDropUpDate;
+    TextView tvDropuptime;
+    TextView tvNoOfItems;
+    CoordinatorLayout clMain;
+    ProgressDialog progressDialog;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.scan_product_detail);
+        initView();
+        initData();
+        initListener();
+    }
+
+
+    private void initView() {
+        tvBookingId=(TextView)findViewById(R.id.tvBookingId);
+        tvBookingStatus=(TextView)findViewById(R.id.tvBookingStatus);
+        tvClientName=(TextView)findViewById(R.id.tvClientName);
+        tvEmail=(TextView)findViewById(R.id.tvEmail);
+        tvPhone=(TextView)findViewById(R.id.tvPhone);
+        tvPickup=(TextView)findViewById(R.id.tvPickup);
+        tvPickUpAddress=(TextView)findViewById(R.id.tvPickUpAddress);
+        tvPickUpDate=(TextView)findViewById(R.id.tvPickUpDate);
+        tvPickuptime=(TextView)findViewById(R.id.tvPickuptime);
+        tvDropOff=(TextView)findViewById(R.id.tvDropOff);
+        tvDropUpAddress=(TextView)findViewById(R.id.tvDropUpAddress);
+        tvDropUpDate=(TextView)findViewById(R.id.tvDropUpDate);
+        tvDropuptime=(TextView)findViewById(R.id.tvDropuptime);
+        tvNoOfItems=(TextView)findViewById(R.id.tvNoOfItems);
+        clMain = (CoordinatorLayout)findViewById(R.id.clMain);
+    }
+
+    private void initData() {
+        userDetailsPref = UserDetailsPref.getInstance ();
+        progressDialog = new ProgressDialog(this);
+        Intent intent = getIntent();
+        try {
+            JSONObject jsonObj = new JSONObject(intent.getStringExtra("response"));
+            boolean error = jsonObj.getBoolean (AppConfigTags.ERROR);
+            String message = jsonObj.getString (AppConfigTags.MESSAGE);
+            if (! error) {
+                tvBookingId.setText("Booking Id :"+jsonObj.getInt (AppConfigTags.BOOKING_ID));
+
+                tvBookingStatus.setText(jsonObj.getString (AppConfigTags.BOOKING_STATUS));
+                tvClientName.setText(jsonObj.getString (AppConfigTags.CLIENT_NAME));
+                tvEmail.setText(jsonObj.getString (AppConfigTags.CLIENT_EMAIL));
+                tvPhone.setText(jsonObj.getString (AppConfigTags.CLIENT_PHONE));
+                tvPickUpAddress.setText(jsonObj.getString (AppConfigTags.PICKUP_LOCATION));
+                tvPickUpDate.setText(jsonObj.getString (AppConfigTags.PICKUP_DATE));
+                tvPickuptime.setText(jsonObj.getString (AppConfigTags.PICKUP_TIME_START));
+                tvDropUpDate.setText(jsonObj.getString (AppConfigTags.DROP_DATE));
+                tvDropuptime.setText(jsonObj.getString (AppConfigTags.DROP_TIME_START));
+
+                tvBookingId.setText("Booking Id :"+jsonObj.getInt (AppConfigTags.BOOKING_ID));
+                tvBookingStatus.setText(jsonObj.getString (AppConfigTags.BOOKING_STATUS));
+                tvClientName.setText(jsonObj.getString (AppConfigTags.CLIENT_NAME));
+                tvEmail.setText(jsonObj.getString (AppConfigTags.CLIENT_EMAIL));
+                tvPhone.setText(jsonObj.getString (AppConfigTags.CLIENT_PHONE));
+                tvPickUpAddress.setText(jsonObj.getString (AppConfigTags.PICKUP_LOCATION));
+                tvPickUpDate.setText(jsonObj.getString (AppConfigTags.PICKUP_DATE));
+                tvPickuptime.setText(jsonObj.getString (AppConfigTags.PICKUP_TIME_START)+" - "+jsonObj.getString (AppConfigTags.PICKUP_TIME_END));
+                tvDropUpAddress.setText(jsonObj.getString (AppConfigTags.DROP_LOCATION));
+                tvDropUpDate.setText(jsonObj.getString (AppConfigTags.DROP_DATE));
+                tvDropuptime.setText(jsonObj.getString (AppConfigTags.DROP_TIME_START)+" - "+jsonObj.getString (AppConfigTags.DROP_TIME_END));
+                tvNoOfItems.setText(jsonObj.getString (AppConfigTags.NO_OF_ITEMS));
+
+            } else {
+                Utils.showSnackBar (ScanDetailActivity.this, clMain, message, Snackbar.LENGTH_LONG, null, null);
+            }
+            progressDialog.dismiss ();
+        } catch (Exception e) {
+            progressDialog.dismiss ();
+            Utils.showSnackBar (ScanDetailActivity.this, clMain, getResources ().getString (R.string.snackbar_text_exception_occurred), Snackbar.LENGTH_LONG, getResources ().getString (R.string.snackbar_action_dismiss), null);
+            e.printStackTrace ();
+        }
+        //Log.e("value",intent.getStringExtra("scan_value"));
+       // getScannedData(String.valueOf(intent.getStringExtra("scan_value")));
+
+
+
+    }
+
+    private void initListener() {
+
+    }
+
+    private void getScannedData (final String scan_value) {
+        if (NetworkConnection.isNetworkAvailable (ScanDetailActivity.this)) {
+            Utils.showProgressDialog (progressDialog, getResources ().getString (R.string.progress_dialog_text_please_wait), true);
+            Utils.showLog (Log.INFO, "" + AppConfigTags.URL, AppConfigURL.SCAN_PRODUCT, true);
+            StringRequest strRequest1 = new StringRequest (Request.Method.POST, AppConfigURL.SCAN_PRODUCT,
+                    new com.android.volley.Response.Listener<String> () {
+                        @Override
+                        public void onResponse (String response) {
+                            Utils.showLog (Log.INFO, AppConfigTags.SERVER_RESPONSE, response, true);
+                            if (response != null) {
+                                try {
+                                    JSONObject jsonObj = new JSONObject(response);
+                                    boolean error = jsonObj.getBoolean (AppConfigTags.ERROR);
+                                    String message = jsonObj.getString (AppConfigTags.MESSAGE);
+                                    if (! error) {
+                                        tvBookingId.setText("Booking Id :"+jsonObj.getInt (AppConfigTags.BOOKING_ID));
+
+                                        tvBookingStatus.setText(jsonObj.getString (AppConfigTags.BOOKING_STATUS));
+                                        tvClientName.setText(jsonObj.getString (AppConfigTags.CLIENT_NAME));
+                                        tvEmail.setText(jsonObj.getString (AppConfigTags.CLIENT_EMAIL));
+                                        tvPhone.setText(jsonObj.getString (AppConfigTags.CLIENT_PHONE));
+                                        tvPickUpAddress.setText(jsonObj.getString (AppConfigTags.PICKUP_LOCATION));
+                                        tvPickUpDate.setText(jsonObj.getString (AppConfigTags.PICKUP_DATE));
+                                        tvPickuptime.setText(jsonObj.getString (AppConfigTags.PICKUP_TIME_START));
+                                        tvDropUpDate.setText(jsonObj.getString (AppConfigTags.DROP_DATE));
+                                        tvDropuptime.setText(jsonObj.getString (AppConfigTags.DROP_TIME_START));
+                                        
+                                        tvBookingId.setText("Booking Id :"+jsonObj.getInt (AppConfigTags.BOOKING_ID));
+                                        tvBookingStatus.setText(jsonObj.getString (AppConfigTags.BOOKING_STATUS));
+                                        tvClientName.setText(jsonObj.getString (AppConfigTags.CLIENT_NAME));
+                                        tvEmail.setText(jsonObj.getString (AppConfigTags.CLIENT_EMAIL));
+                                        tvPhone.setText(jsonObj.getString (AppConfigTags.CLIENT_PHONE));
+                                        tvPickUpAddress.setText(jsonObj.getString (AppConfigTags.PICKUP_LOCATION));
+                                        tvPickUpDate.setText(jsonObj.getString (AppConfigTags.PICKUP_DATE));
+                                        tvPickuptime.setText(jsonObj.getString (AppConfigTags.PICKUP_TIME_START)+" - "+jsonObj.getString (AppConfigTags.PICKUP_TIME_END));
+                                        tvDropUpAddress.setText(jsonObj.getString (AppConfigTags.DROP_LOCATION));
+                                        tvDropUpDate.setText(jsonObj.getString (AppConfigTags.DROP_DATE));
+                                        tvDropuptime.setText(jsonObj.getString (AppConfigTags.DROP_TIME_START)+"-"+jsonObj.getString (AppConfigTags.DROP_TIME_END));
+                                        tvNoOfItems.setText(jsonObj.getString (AppConfigTags.NO_OF_ITEMS));
+
+                                       } else {
+                                        Utils.showSnackBar (ScanDetailActivity.this, clMain, message, Snackbar.LENGTH_LONG, null, null);
+                                    }
+                                    progressDialog.dismiss ();
+                                } catch (Exception e) {
+                                    progressDialog.dismiss ();
+                                    Utils.showSnackBar (ScanDetailActivity.this, clMain, getResources ().getString (R.string.snackbar_text_exception_occurred), Snackbar.LENGTH_LONG, getResources ().getString (R.string.snackbar_action_dismiss), null);
+                                    e.printStackTrace ();
+                                }
+                            } else {
+                                Utils.showSnackBar (ScanDetailActivity.this, clMain, getResources ().getString (R.string.snackbar_text_error_occurred), Snackbar.LENGTH_LONG, getResources ().getString (R.string.snackbar_action_dismiss), null);
+                                Utils.showLog (Log.WARN, AppConfigTags.SERVER_RESPONSE, AppConfigTags.DIDNT_RECEIVE_ANY_DATA_FROM_SERVER, true);
+                            }
+                            progressDialog.dismiss ();
+                        }
+                    },
+                    new com.android.volley.Response.ErrorListener () {
+                        @Override
+                        public void onErrorResponse (VolleyError error) {
+                            Utils.showLog (Log.ERROR, AppConfigTags.VOLLEY_ERROR, error.toString (), true);
+                            NetworkResponse response = error.networkResponse;
+                            if (response != null && response.data != null) {
+                                Utils.showLog (Log.ERROR, AppConfigTags.ERROR, new String(response.data), true);
+                            }
+                            Utils.showSnackBar (ScanDetailActivity.this, clMain, getResources ().getString (R.string.snackbar_text_error_occurred), Snackbar.LENGTH_LONG, getResources ().getString (R.string.snackbar_action_dismiss), null);
+                            progressDialog.dismiss ();
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams () throws AuthFailureError {
+                    Map<String, String> params = new Hashtable<String, String>();
+                    params.put (AppConfigTags.BARCODE_VALUE, scan_value);
+
+                    Utils.showLog (Log.INFO, AppConfigTags.PARAMETERS_SENT_TO_THE_SERVER, "" + params, true);
+                    return params;
+                }
+
+                @Override
+                public Map<String, String> getHeaders () throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put (AppConfigTags.HEADER_API_KEY, Constants.api_key);
+                    Utils.showLog (Log.INFO, AppConfigTags.HEADERS_SENT_TO_THE_SERVER, "" + params, false);
+                    return params;
+                }
+            };
+            Utils.sendRequest (strRequest1, 60);
+        } else {
+            Utils.showSnackBar (this, clMain, getResources ().getString (R.string.snackbar_text_no_internet_connection_available), Snackbar.LENGTH_LONG, getResources ().getString (R.string.snackbar_action_go_to_settings), new View.OnClickListener () {
+                @Override
+                public void onClick (View v) {
+                    Intent dialogIntent = new Intent(Settings.ACTION_SETTINGS);
+                    dialogIntent.addFlags (Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity (dialogIntent);
+                }
+            });
+        }
+    }
+}

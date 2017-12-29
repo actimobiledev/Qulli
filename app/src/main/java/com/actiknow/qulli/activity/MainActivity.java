@@ -434,7 +434,7 @@ public class MainActivity extends AppCompatActivity {
                 .content ("Do you wish to Sign Out?")
                 .positiveText ("Yes")
                 .negativeText ("No")
-              
+
                 .typeface (SetTypeFace.getTypeface (MainActivity.this), SetTypeFace.getTypeface (MainActivity.this))
                 .onPositive (new MaterialDialog.SingleButtonCallback () {
                     @Override
