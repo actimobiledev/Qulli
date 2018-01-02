@@ -49,12 +49,10 @@ public class LoginActivity extends AppCompatActivity {
     TextView tvPassword;
     EditText etPassword;
     TextView tvForgotPassword;
-    TextView tvFieldsTitle;
     UserDetailsPref userDetailsPref;
     ProgressDialog progressDialog;
     ImageView ivNext;
     CoordinatorLayout clMain;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,8 +92,6 @@ public class LoginActivity extends AppCompatActivity {
                     etUserName.setError(s1);
                 } else {
                     sendLoginDetailsToServer(etUserName.getText().toString(), etPassword.getText().toString());
-
-
                 }
             }
         });
@@ -137,9 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                 showForgotPasswordDialog();
             }
         });
-
     }
-
 
     private void showForgotPasswordDialog() {
         MaterialDialog dialog = new MaterialDialog.Builder(this)
@@ -156,11 +150,9 @@ public class LoginActivity extends AppCompatActivity {
                         sendForgotPasswordRequestToServer(input.toString());
                     }
                 }).build();
-        
         dialog.show();
     }
-
-
+    
     private void sendForgotPasswordRequestToServer (final String user_name) {
         if (NetworkConnection.isNetworkAvailable (LoginActivity.this)) {
             Utils.showProgressDialog (progressDialog, getResources ().getString (R.string.progress_dialog_text_please_wait), true);
@@ -179,7 +171,6 @@ public class LoginActivity extends AppCompatActivity {
                                         Utils.showSnackBar (LoginActivity.this, clMain, message, Snackbar.LENGTH_LONG, null, null);
                                     } else {
                                         Utils.showSnackBar (LoginActivity.this, clMain, message, Snackbar.LENGTH_LONG, null, null);
-
                                     }
                                     progressDialog.dismiss ();
                                 } catch (Exception e) {
@@ -320,8 +311,7 @@ public class LoginActivity extends AppCompatActivity {
             });
         }
     }
-
-
+    
     @Override
     public void onBackPressed () {
         Intent intent = new Intent();
@@ -331,7 +321,4 @@ public class LoginActivity extends AppCompatActivity {
         overridePendingTransition (R.anim.slide_in_right, R.anim.slide_out_left);
 //        super.onBackPressed ();
     }
-
-
-    
 }

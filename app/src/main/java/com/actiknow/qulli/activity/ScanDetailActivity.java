@@ -155,7 +155,6 @@ public class ScanDetailActivity extends AppCompatActivity {
             Utils.showSnackBar (ScanDetailActivity.this, clMain, getResources ().getString (R.string.snackbar_text_exception_occurred), Snackbar.LENGTH_LONG, getResources ().getString (R.string.snackbar_action_dismiss), null);
             e.printStackTrace ();
         }
-
     }
 
     private void initListener() {

@@ -338,7 +338,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvNoOfItems"
                     android:layout_marginTop="@dimen/activity_margin"
-                    android:background="@drawable/et_background"
+                    android:background="@drawable/edit_text_background"
                     android:padding="@dimen/activity_margin_small"
                     android:text="Update Delivery Status"
                     android:textSize="@dimen/text_size_medium"
