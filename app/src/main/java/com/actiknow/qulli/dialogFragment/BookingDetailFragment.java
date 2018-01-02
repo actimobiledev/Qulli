@@ -1,23 +1,17 @@
 package com.actiknow.qulli.dialogFragment;
 
 import android.app.Dialog;
-import android.app.FragmentTransaction;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,9 +68,8 @@ public class BookingDetailFragment extends DialogFragment {
     String arrayResponse;
     int scanItem=0;
     int numberOfItem;
-    private Barcode barcodeResult;
     JSONArray jsonArrayAsset;
-
+    private Barcode barcodeResult;
 
     public BookingDetailFragment newInstance(String response, int booking_id) {
         BookingDetailFragment f = new BookingDetailFragment();
@@ -165,8 +158,7 @@ public class BookingDetailFragment extends DialogFragment {
         tvTitle = (TextView) root.findViewById(R.id.tvTitle);
         tvScan = (TextView) root.findViewById(R.id.tvScan);
         ivAddAsset = (ImageView) root.findViewById(R.id.ivAddAsset);
-        ivCancel = (ImageView) root.findViewById(R.id.ivBack);
-        //  ivCancel = (ImageView) root.findViewById(R.id.ivCancel);
+        ivCancel = (ImageView) root.findViewById (R.id.ivCancel);
     }
 
     private void initBundle() {

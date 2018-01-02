@@ -10,10 +10,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 
 import com.actiknow.qulli.R;
 import com.actiknow.qulli.model.BookingStatus;
@@ -62,7 +60,6 @@ public class ScanDetailActivity extends AppCompatActivity {
     TextView tvAvailableStatus;
     TextView tvSubmit;
     ImageView ivBack;
-    Button btStatus;
     ArrayList<String> bookingStatusText = new ArrayList<String> ();
 
     CoordinatorLayout clMain;
@@ -96,7 +93,6 @@ public class ScanDetailActivity extends AppCompatActivity {
         tvAvailableStatus=(TextView)findViewById(R.id.tvAvailableStatus);
         tvSubmit=(TextView)findViewById(R.id.tvSubmit);
         ivBack=(ImageView) findViewById(R.id.ivBack);
-        btStatus = (Button)findViewById(R.id.btStatus);
         clMain = (CoordinatorLayout)findViewById(R.id.clMain);
     }
 
@@ -113,10 +109,8 @@ public class ScanDetailActivity extends AppCompatActivity {
 
                 JSONArray available_status = jsonObj.getJSONArray(AppConfigTags.AVAILABLE_STATUS);
                 if (available_status.length()>0){
-                    btStatus.setVisibility(View.VISIBLE);
                     tvAvailableStatus.setVisibility(View.VISIBLE);
                 }else {
-                    btStatus.setVisibility(View.INVISIBLE);
                     tvAvailableStatus.setVisibility(View.GONE);
                 }
                 bookingStatusList.clear();
@@ -165,7 +159,7 @@ public class ScanDetailActivity extends AppCompatActivity {
     }
 
     private void initListener() {
-        btStatus.setOnClickListener(new View.OnClickListener() {
+        tvAvailableStatus.setOnClickListener (new View.OnClickListener () {
             @Override
             public void onClick(View view) {
                 statusDialog();
@@ -205,10 +199,8 @@ public class ScanDetailActivity extends AppCompatActivity {
                         tvAvailableStatus.setText(text);
                         status_id = bookingStatusList.get(which).getStatus_id();
                         if (tvAvailableStatus.getText().toString().equalsIgnoreCase("Add Available Status")){
-                            btStatus.setVisibility(View.VISIBLE);
                             tvSubmit.setVisibility(View.GONE);
                         }else {
-                            btStatus.setVisibility(View.VISIBLE);
                             tvSubmit.setVisibility(View.VISIBLE);
                         }
                     }

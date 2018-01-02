@@ -1,111 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/clMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBar"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/ivCancel"
+        android:layout_width="?attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize"
+        android:padding="@dimen/activity_margin"
+        android:src="@drawable/ic_close"/>
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        android:visibility="visible">
+        android:layout_alignBottom="@+id/ivCancel"
+        android:layout_alignTop="@+id/ivCancel"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="Booking Details"
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/text_size_large"
+        android:textStyle="bold"/>
+    <View
+        android:id="@+id/v1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/ivCancel"
+        android:background="@color/text_color_grey_light2"/>
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/Widget.MyApp.ActionBar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:animateLayoutChanges="true"
-            android:background="@android:color/transparent"
-            android:visibility="visible"
-            app:contentInsetEnd="0dp"
-            app:contentInsetLeft="0dp"
-            app:contentInsetRight="0dp"
-            app:contentInsetStart="0dp"
-            app:layout_collapseMode="pin">
-
-            <RelativeLayout
-                android:id="@+id/toolbar_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <RelativeLayout
-                    android:id="@+id/rlBack"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/ivBack"
-                        android:layout_width="35dp"
-                        android:layout_height="30dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_close_red"
-                        android:visibility="visible"
-                        android:paddingLeft="@dimen/activity_margin"/>
-
-
-                    <TextView
-                        android:id="@+id/tvBack"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_toEndOf="@+id/ivBack"
-                        android:layout_toRightOf="@+id/ivBack"
-                        android:gravity="center_vertical"
-                        android:text="Home"
-                        android:textColor="@color/text_color_white"
-                        android:textSize="@dimen/text_size_small"
-                        android:visibility="invisible" />
-                </RelativeLayout>
-
-                <TextView
-                    android:id="@+id/tvTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:gravity="center"
-                    android:text="Change Password"
-                    android:textColor="@color/text_color_white"
-                    android:textSize="@dimen/text_size_large" />
-
-            </RelativeLayout>
-
-        </android.support.v7.widget.Toolbar>
-    </android.support.design.widget.AppBarLayout>
-
-
-
-
-
-<!--
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="@dimen/activity_margin_extra_small"
-    card_view:cardCornerRadius="@dimen/cardview_default_radius"
-    card_view:cardElevation="@dimen/cardview_elevation"
-    card_view:layout_behavior="@string/appbar_scrolling_view_behavior">
--->
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/v1"
+                    android:orientation="horizontal"
+    >
 
         <RelativeLayout
+            android:id="@+id/rlMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:paddingLeft="@dimen/activity_margin"
-            android:paddingRight="@dimen/activity_margin_small"
-            android:id="@+id/rlMain">
+            android:paddingRight="@dimen/activity_margin_small">
 
             <RelativeLayout
                 android:id="@+id/rlClientInfo"
@@ -119,12 +57,12 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
+                    android:paddingTop="@dimen/activity_margin_small"
                     android:text="Booking Id : 89"
                     android:textColor="@color/primary_text"
                     android:textSize="@dimen/text_size_large"
                     android:textStyle="bold"
-                    android:visibility="visible"
-                    android:paddingTop="@dimen/activity_margin_small"/>
+                    android:visibility="visible"/>
 
                 <TextView
                     android:id="@+id/tvBookingStatus"
@@ -137,7 +75,7 @@
                     android:text="Pickup"
                     android:textColor="@color/secondary_text"
                     android:textSize="@dimen/text_size_extra_small"
-                    android:visibility="visible" />
+                    android:visibility="visible"/>
 
                 <TextView
                     android:id="@+id/tvClientName"
@@ -150,7 +88,7 @@
                     android:text="Actiknow Business Consulting"
                     android:textColor="@color/secondary_text"
                     android:textSize="@dimen/text_size_extra_small"
-                    android:visibility="visible" />
+                    android:visibility="visible"/>
 
                 <TextView
                     android:id="@+id/tvEmail"
@@ -162,7 +100,7 @@
                     android:text="rahul.badkul@gmail.com"
                     android:textColor="@color/secondary_text"
                     android:textSize="@dimen/text_size_extra_small"
-                    android:visibility="visible" />
+                    android:visibility="visible"/>
 
                 <TextView
                     android:id="@+id/tvPhone"
@@ -175,7 +113,7 @@
                     android:text="963698745"
                     android:textColor="@color/secondary_text"
                     android:textSize="@dimen/text_size_extra_small"
-                    android:visibility="visible" />
+                    android:visibility="visible"/>
 
 
             </RelativeLayout>
@@ -197,8 +135,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvPickup"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:layout_marginTop="@dimen/activity_margin_small">
+                    android:layout_marginTop="@dimen/activity_margin_small"
+                    android:layout_weight="1">
 
 
                     <TextView
@@ -211,7 +149,7 @@
                         android:textColor="@color/primary_text"
                         android:textSize="@dimen/text_size_medium"
                         android:textStyle="bold"
-                        android:visibility="visible" />
+                        android:visibility="visible"/>
 
 
                     <TextView
@@ -225,7 +163,7 @@
                         android:text="Actiknow Business Consultin"
                         android:textColor="@color/secondary_text"
                         android:textSize="@dimen/text_size_extra_small"
-                        android:visibility="visible" />
+                        android:visibility="visible"/>
 
                     <TextView
                         android:id="@+id/tvPickUpDate"
@@ -237,7 +175,7 @@
                         android:text="10:40 - 12:40"
                         android:textColor="@color/secondary_text"
                         android:textSize="@dimen/text_size_extra_small"
-                        android:visibility="visible" />
+                        android:visibility="visible"/>
 
                     <TextView
                         android:id="@+id/tvPickuptime"
@@ -250,7 +188,7 @@
                         android:text="963698745"
                         android:textColor="@color/secondary_text"
                         android:textSize="@dimen/text_size_extra_small"
-                        android:visibility="visible" />
+                        android:visibility="visible"/>
 
 
                 </RelativeLayout>
@@ -262,8 +200,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvPickup"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:layout_marginTop="@dimen/activity_margin_small">
+                    android:layout_marginTop="@dimen/activity_margin_small"
+                    android:layout_weight="1">
 
 
                     <TextView
@@ -276,7 +214,7 @@
                         android:textColor="@color/primary_text"
                         android:textSize="@dimen/text_size_medium"
                         android:textStyle="bold"
-                        android:visibility="visible" />
+                        android:visibility="visible"/>
 
 
                     <TextView
@@ -290,7 +228,7 @@
                         android:text="Actiknow Business Consulting"
                         android:textColor="@color/secondary_text"
                         android:textSize="@dimen/text_size_extra_small"
-                        android:visibility="visible" />
+                        android:visibility="visible"/>
 
                     <TextView
                         android:id="@+id/tvDropUpDate"
@@ -302,7 +240,7 @@
                         android:text="10:40 - 12:40"
                         android:textColor="@color/secondary_text"
                         android:textSize="@dimen/text_size_extra_small"
-                        android:visibility="visible" />
+                        android:visibility="visible"/>
 
                     <TextView
                         android:id="@+id/tvDropuptime"
@@ -315,7 +253,7 @@
                         android:text="963698745"
                         android:textColor="@color/secondary_text"
                         android:textSize="@dimen/text_size_extra_small"
-                        android:visibility="visible" />
+                        android:visibility="visible"/>
 
                 </RelativeLayout>
 
@@ -333,7 +271,7 @@
                 android:textColor="@color/primary_text"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
-                android:visibility="visible" />
+                android:visibility="visible"/>
 
             <TextView
                 android:id="@+id/tvNoAsset"
@@ -342,13 +280,12 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/tvNoOfItems"
+                android:layout_marginTop="@dimen/activity_margin_extra_small"
                 android:text="No Of Items Scan:"
                 android:textColor="@color/primary_text"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
-                android:visibility="visible"
-                android:paddingBottom="@dimen/activity_margin_small"/>
-
+                android:visibility="visible"/>
 
 
         </RelativeLayout>
@@ -361,26 +298,21 @@
             android:layout_alignParentRight="true"
             android:layout_margin="@dimen/activity_margin_small"
             android:src="@drawable/ic_add"
-            android:visibility="gone" />
-
+            android:visibility="gone"/>
 
 
         <TextView
+            android:id="@+id/tvScan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/activity_margin"
-            android:background="@color/colorPrimary"
+            android:layout_below="@+id/rlMain"
+            android:layout_margin="@dimen/activity_margin"
+            android:background="@color/primary"
+            android:gravity="center"
+            android:padding="@dimen/activity_margin_small"
             android:text="ADD ITEMS"
             android:textColor="@color/text_color_white"
-            android:textStyle="bold"
-            android:gravity="center"
             android:textSize="@dimen/text_size_medium"
-            android:layout_marginLeft="@dimen/activity_margin"
-            android:layout_marginRight="@dimen/activity_margin"
-            android:id="@+id/tvScan"
-            android:layout_below="@+id/rlMain"
-            android:layout_marginTop="@dimen/activity_margin"/>
-
+            android:textStyle="bold"/>
     </RelativeLayout>
-<!--</android.support.v7.widget.CardView>-->
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

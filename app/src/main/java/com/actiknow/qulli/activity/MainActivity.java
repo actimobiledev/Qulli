@@ -2,8 +2,6 @@ package com.actiknow.qulli.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -36,6 +34,7 @@ import com.actiknow.qulli.utils.AppConfigTags;
 import com.actiknow.qulli.utils.AppConfigURL;
 import com.actiknow.qulli.utils.Constants;
 import com.actiknow.qulli.utils.NetworkConnection;
+import com.actiknow.qulli.utils.RecyclerViewMargin;
 import com.actiknow.qulli.utils.SetTypeFace;
 import com.actiknow.qulli.utils.UserDetailsPref;
 import com.actiknow.qulli.utils.Utils;
@@ -81,24 +80,21 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_LOGIN_SCREEN_RESULT = 2;
+    public static int PERMISSION_REQUEST_CODE = 11;
     SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView rvBooking;
     UserDetailsPref userDetailsPref;
     List<Booking> bookingList = new ArrayList<>();
     BookingAdapter bookingAdapter;
     CoordinatorLayout clMain;
-    public static int PERMISSION_REQUEST_CODE = 11;
-
-    private Barcode barcodeResult;
     TextView tvScan;
     ProgressDialog progressDialog;
     ImageView ivNavigation;
-
-
-    private AccountHeader headerResult = null;
-    private Drawer result = null;
     Bundle savedInstanceState;
     String arrayResponse;
+    private Barcode barcodeResult;
+    private AccountHeader headerResult = null;
+    private Drawer result = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
         rvBooking.setHasFixedSize(true);
         rvBooking.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rvBooking.setItemAnimator(new DefaultItemAnimator());
+        rvBooking.addItemDecoration (new RecyclerViewMargin ((int) Utils.pxFromDp (MainActivity.this, 16), (int) Utils.pxFromDp (MainActivity.this, 16), (int) Utils.pxFromDp (MainActivity.this, 16), (int) Utils.pxFromDp (MainActivity.this, 16), 1, 0, RecyclerViewMargin.LAYOUT_MANAGER_LINEAR, RecyclerViewMargin.ORIENTATION_VERTICAL));
     }
 
     private void initListener() {
@@ -459,7 +456,7 @@ public class MainActivity extends AppCompatActivity {
 
         headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
-                .withCompactStyle(false)
+                .withCompactStyle (true)
                 .withTypeface(SetTypeFace.getTypeface(MainActivity.this))
                 .withTypeface(SetTypeFace.getTypeface(this))
                 .withPaddingBelowHeader(false)
@@ -468,6 +465,7 @@ public class MainActivity extends AppCompatActivity {
                 .withProfileImagesVisible(false)
                 .withOnlyMainProfileImageVisible(true)
                 .withDividerBelowHeader(true)
+                .withProfileImagesClickable (false)
                 .withHeaderBackground(R.color.primary)
                 .withSavedInstance(savedInstanceState)
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
@@ -480,7 +478,6 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .build();
         headerResult.addProfiles(new ProfileDrawerItem()
-                .withIcon(R.drawable.doctor)
                 .withName(userDetailsPref.getStringPref(MainActivity.this, UserDetailsPref.DRIVER_NAME))
                 .withEmail(userDetailsPref.getStringPref(MainActivity.this, UserDetailsPref.DRIVER_EMAIL)));
 
@@ -488,6 +485,7 @@ public class MainActivity extends AppCompatActivity {
         result = new DrawerBuilder()
                 .withActivity(this)
                 .withAccountHeader(headerResult)
+
 //                .withToolbar (toolbar)
 //                .withItemAnimator (new AlphaCrossFadeAnimator ())
                 .addDrawerItems(
