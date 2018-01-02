@@ -255,7 +255,7 @@ public class LoginActivity extends AppCompatActivity {
                                         userDetailsPref.putStringPref (LoginActivity.this, UserDetailsPref.DRIVER_ID, jsonObj.getString (AppConfigTags.DRIVER_ID));
                                         userDetailsPref.putStringPref (LoginActivity.this, UserDetailsPref.DRIVER_NAME, jsonObj.getString (AppConfigTags.DRIVER_NAME));
                                         userDetailsPref.putStringPref (LoginActivity.this, UserDetailsPref.DRIVER_EMAIL, jsonObj.getString (AppConfigTags.DRIVER_EMAIL));
-                                        userDetailsPref.putStringPref (LoginActivity.this, UserDetailsPref.DRIVER_LOGIN_KEY, jsonObj.getString (AppConfigTags.HEADER_DRIVER_LOGIN_KEY));
+                                        userDetailsPref.putStringPref (LoginActivity.this, UserDetailsPref.DRIVER_LOGIN_KEY, jsonObj.getString (AppConfigTags.DRIVER_LOGIN_KEY));
                                         Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                                         startActivity(intent);
                                         finish ();

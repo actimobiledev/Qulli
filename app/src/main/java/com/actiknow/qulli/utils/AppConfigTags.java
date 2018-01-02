@@ -36,6 +36,7 @@ public class AppConfigTags {
 
     public static final String DRIVER_ID = "driver_id";
     public static final String DRIVER_NAME = "driver_name";
+    public static final String DRIVER_LOGIN_KEY = "driver_login_key";
     public static final String DRIVER_EMAIL = "driver_email";
     public static final String OLD_PASSWORD = "old_password";
     public static final String NEW_PASSWORD = "new_password";

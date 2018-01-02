@@ -75,8 +75,8 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
         holder.tvEmail.setText("Email : "+booking.getClient_email());
         holder.tvPhone.setText("Phone : "+booking.getClient_phone());
         holder.tvPickUpAddress.setText(booking.getPickup_address());
-        holder.tvPickUpDate.setText(booking.getPickup_date());
-        holder.tvPickuptime.setText(booking.getPickup_time_start()+" - "+booking.getPickup_time_end());
+        holder.tvPickUpDate.setText("Date : "+booking.getPickup_date());
+        holder.tvPickuptime.setText("Time : "+booking.getPickup_time_start()+" - "+booking.getPickup_time_end());
         holder.tvDropUpAddress.setText(booking.getDrop_address());
         holder.tvDropUpDate.setText(booking.getDrop_date());
         holder.tvDropuptime.setText(booking.getDrop_time_start()+" - "+booking.getDrop_time_end());
@@ -232,9 +232,9 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
         
         @Override
         public void onClick (View v) {
-            final Booking jobDescription = bookingList.get (getLayoutPosition ());
-            activity.overridePendingTransition (R.anim.slide_in_right, R.anim.slide_out_left);
-            
+           // final Booking jobDescription = bookingList.get (getLayoutPosition ());
+           // activity.overridePendingTransition (R.anim.slide_in_right, R.anim.slide_out_left);
+            mItemClickListener.onItemClick(v,getLayoutPosition());
             
         }
     }

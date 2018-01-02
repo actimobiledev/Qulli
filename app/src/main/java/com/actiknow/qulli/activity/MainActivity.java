@@ -2,6 +2,8 @@ package com.actiknow.qulli.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +30,7 @@ import android.widget.TextView;
 
 import com.actiknow.qulli.R;
 import com.actiknow.qulli.adapter.BookingAdapter;
+import com.actiknow.qulli.dialogFragment.BookingDetailFragment;
 import com.actiknow.qulli.model.Booking;
 import com.actiknow.qulli.utils.AppConfigTags;
 import com.actiknow.qulli.utils.AppConfigURL;
@@ -81,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView rvBooking;
     UserDetailsPref userDetailsPref;
-    List<Booking> bookingList=new ArrayList<>();
+    List<Booking> bookingList = new ArrayList<>();
     BookingAdapter bookingAdapter;
     CoordinatorLayout clMain;
     public static int PERMISSION_REQUEST_CODE = 11;
@@ -95,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
     private AccountHeader headerResult = null;
     private Drawer result = null;
     Bundle savedInstanceState;
+    String arrayResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,11 +129,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        clMain=(CoordinatorLayout)findViewById(R.id.clMain);
-        rvBooking=(RecyclerView)findViewById(R.id.rvBooking);
-        swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.swipeRefresh);
-        tvScan = (TextView)findViewById(R.id.tvScan);
-        ivNavigation=(ImageView)findViewById(R.id.ivNavigation);
+        clMain = (CoordinatorLayout) findViewById(R.id.clMain);
+        rvBooking = (RecyclerView) findViewById(R.id.rvBooking);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
+        tvScan = (TextView) findViewById(R.id.tvScan);
+        ivNavigation = (ImageView) findViewById(R.id.ivNavigation);
     }
 
     private void initData() {
@@ -138,31 +142,46 @@ public class MainActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
 
     }
+
     private void initAdapter() {
-        bookingAdapter = new BookingAdapter (this, bookingList);
-        rvBooking.setAdapter (bookingAdapter);
-        rvBooking.setHasFixedSize (true);
-        rvBooking.setLayoutManager (new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        rvBooking.setItemAnimator (new DefaultItemAnimator());
+        bookingAdapter = new BookingAdapter(this, bookingList);
+        rvBooking.setAdapter(bookingAdapter);
+        rvBooking.setHasFixedSize(true);
+        rvBooking.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        rvBooking.setItemAnimator(new DefaultItemAnimator());
     }
 
     private void initListener() {
+        bookingAdapter.SetOnItemClickListener(new BookingAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Booking booking=bookingList.get(position);
+                android.app.FragmentTransaction ft = getFragmentManager ().beginTransaction ();
+                BookingDetailFragment dialog = new BookingDetailFragment ().newInstance (arrayResponse,booking.getBooking_id());
+                dialog.show (ft, "Contacts");
+
+            }
+        });
+
+
+
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (NetworkConnection.isNetworkAvailable (MainActivity.this)) {
+                if (NetworkConnection.isNetworkAvailable(MainActivity.this)) {
                     BookingList();
-                }else{
+                } else {
                     OfflineBookingList();
                 }
 
 
             }
         });
-        ivNavigation.setOnClickListener (new View.OnClickListener () {
+        ivNavigation.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick (View view) {
-                result.openDrawer ();
+            public void onClick(View view) {
+                result.openDrawer();
             }
         });
 
@@ -173,153 +192,155 @@ public class MainActivity extends AppCompatActivity {
 //                startActivity (intent);
 //                overridePendingTransition (R.anim.slide_in_up, R.anim.stay);
 
-                checkPermissions ();
-                startScan ();
+                checkPermissions();
+                startScan();
             }
         });
     }
-    public void BookingList () {
-        swipeRefreshLayout.setRefreshing(true);
-        if (NetworkConnection.isNetworkAvailable (MainActivity.this)) {
-            bookingList.clear ();
 
-            Utils.showLog (Log.INFO, AppConfigTags.URL, AppConfigURL.BOOKING, true);
-            StringRequest strRequest = new StringRequest (Request.Method.GET, AppConfigURL.BOOKING,
-                    new Response.Listener<String> () {
+    public void BookingList() {
+        swipeRefreshLayout.setRefreshing(true);
+        if (NetworkConnection.isNetworkAvailable(MainActivity.this)) {
+            bookingList.clear();
+
+            Utils.showLog(Log.INFO, AppConfigTags.URL, AppConfigURL.BOOKING, true);
+            StringRequest strRequest = new StringRequest(Request.Method.GET, AppConfigURL.BOOKING,
+                    new Response.Listener<String>() {
                         @Override
-                        public void onResponse (String response) {
-                            Utils.showLog (Log.INFO, AppConfigTags.SERVER_RESPONSE, response, true);
+                        public void onResponse(String response) {
+                            arrayResponse=response;
+                            Utils.showLog(Log.INFO, AppConfigTags.SERVER_RESPONSE, response, true);
                             if (response != null) {
-                                userDetailsPref.putStringPref(MainActivity.this,UserDetailsPref.RESPONSE,response);
+                                userDetailsPref.putStringPref(MainActivity.this, UserDetailsPref.RESPONSE, response);
                                 try {
 
-                                    JSONObject jsonObj = new JSONObject (response);
-                                    boolean is_error = jsonObj.getBoolean (AppConfigTags.ERROR);
-                                    String message = jsonObj.getString (AppConfigTags.MESSAGE);
-                                    if (! is_error) {
-                                        swipeRefreshLayout.setRefreshing (false);
-                                        JSONArray jsonArrayBooking = jsonObj.getJSONArray (AppConfigTags.BOOKINGS);
+                                    JSONObject jsonObj = new JSONObject(response);
+                                    boolean is_error = jsonObj.getBoolean(AppConfigTags.ERROR);
+                                    String message = jsonObj.getString(AppConfigTags.MESSAGE);
+                                    if (!is_error) {
+                                        swipeRefreshLayout.setRefreshing(false);
+                                        JSONArray jsonArrayBooking = jsonObj.getJSONArray(AppConfigTags.BOOKINGS);
 
-                                        for (int i = 0; i < jsonArrayBooking.length (); i++) {
-                                            JSONObject jsonObjectBooking = jsonArrayBooking.getJSONObject (i);
-                                             Booking booking = new Booking (
-                                                     jsonObjectBooking.getInt (AppConfigTags.BOOKING_ID),
-                                                     jsonObjectBooking.getString (AppConfigTags.BOOKING_STATUS),
-                                                     jsonObjectBooking.getString (AppConfigTags.CLIENT_NAME),
-                                                     jsonObjectBooking.getString (AppConfigTags.CLIENT_EMAIL),
-                                                     jsonObjectBooking.getString (AppConfigTags.CLIENT_PHONE),
-                                                     jsonObjectBooking.getString (AppConfigTags.PICKUP_LOCATION),
-                                                     jsonObjectBooking.getString (AppConfigTags.PICKUP_DATE),
-                                                     jsonObjectBooking.getString (AppConfigTags.PICKUP_TIME_START),
-                                                     jsonObjectBooking.getString (AppConfigTags.PICKUP_TIME_END),
-                                                     jsonObjectBooking.getString (AppConfigTags.DROP_LOCATION),
-                                                     jsonObjectBooking.getString (AppConfigTags.DROP_DATE),
-                                                     jsonObjectBooking.getString (AppConfigTags.DROP_TIME_START),
-                                                     jsonObjectBooking.getString (AppConfigTags.DROP_TIME_END),
-                                                     jsonObjectBooking.getInt (AppConfigTags.NO_OF_ITEMS),
-                                                     jsonObjectBooking.getString (AppConfigTags.NOTES),
-                                                     jsonObjectBooking.getString (AppConfigTags.COST),
-                                                     jsonObjectBooking.getJSONArray (AppConfigTags.ASSETS).toString()
+                                        for (int i = 0; i < jsonArrayBooking.length(); i++) {
+                                            JSONObject jsonObjectBooking = jsonArrayBooking.getJSONObject(i);
+                                            Booking booking = new Booking(
+                                                    jsonObjectBooking.getInt(AppConfigTags.BOOKING_ID),
+                                                    jsonObjectBooking.getString(AppConfigTags.BOOKING_STATUS),
+                                                    jsonObjectBooking.getString(AppConfigTags.CLIENT_NAME),
+                                                    jsonObjectBooking.getString(AppConfigTags.CLIENT_EMAIL),
+                                                    jsonObjectBooking.getString(AppConfigTags.CLIENT_PHONE),
+                                                    jsonObjectBooking.getString(AppConfigTags.PICKUP_LOCATION),
+                                                    jsonObjectBooking.getString(AppConfigTags.PICKUP_DATE),
+                                                    jsonObjectBooking.getString(AppConfigTags.PICKUP_TIME_START),
+                                                    jsonObjectBooking.getString(AppConfigTags.PICKUP_TIME_END),
+                                                    jsonObjectBooking.getString(AppConfigTags.DROP_LOCATION),
+                                                    jsonObjectBooking.getString(AppConfigTags.DROP_DATE),
+                                                    jsonObjectBooking.getString(AppConfigTags.DROP_TIME_START),
+                                                    jsonObjectBooking.getString(AppConfigTags.DROP_TIME_END),
+                                                    jsonObjectBooking.getInt(AppConfigTags.NO_OF_ITEMS),
+                                                    jsonObjectBooking.getString(AppConfigTags.NOTES),
+                                                    jsonObjectBooking.getString(AppConfigTags.COST),
+                                                    jsonObjectBooking.getJSONArray(AppConfigTags.ASSETS).toString()
                                             );
-                                            bookingList.add (i, booking);
+                                            bookingList.add(i, booking);
                                         }
 
 
-                                        bookingAdapter.notifyDataSetChanged ();
+                                        bookingAdapter.notifyDataSetChanged();
                                     }
                                 } catch (Exception e) {
-                                    e.printStackTrace ();
-                                    Utils.showSnackBar (MainActivity.this, clMain, getResources ().getString (R.string.snackbar_text_exception_occurred), Snackbar.LENGTH_LONG, getResources ().getString (R.string.snackbar_action_dismiss), null);
+                                    e.printStackTrace();
+                                    Utils.showSnackBar(MainActivity.this, clMain, getResources().getString(R.string.snackbar_text_exception_occurred), Snackbar.LENGTH_LONG, getResources().getString(R.string.snackbar_action_dismiss), null);
 
                                 }
                             } else {
-                                Utils.showSnackBar (MainActivity.this, clMain, getResources ().getString (R.string.snackbar_text_error_occurred), Snackbar.LENGTH_LONG, getResources ().getString (R.string.snackbar_action_dismiss), null);
-                                Utils.showLog (Log.WARN, AppConfigTags.SERVER_RESPONSE, AppConfigTags.DIDNT_RECEIVE_ANY_DATA_FROM_SERVER, true);
+                                Utils.showSnackBar(MainActivity.this, clMain, getResources().getString(R.string.snackbar_text_error_occurred), Snackbar.LENGTH_LONG, getResources().getString(R.string.snackbar_action_dismiss), null);
+                                Utils.showLog(Log.WARN, AppConfigTags.SERVER_RESPONSE, AppConfigTags.DIDNT_RECEIVE_ANY_DATA_FROM_SERVER, true);
                             }
                         }
                     },
-                    new Response.ErrorListener () {
+                    new Response.ErrorListener() {
                         @Override
-                        public void onErrorResponse (VolleyError error) {
-                            Utils.showLog (Log.ERROR, AppConfigTags.VOLLEY_ERROR, error.toString (), true);
+                        public void onErrorResponse(VolleyError error) {
+                            Utils.showLog(Log.ERROR, AppConfigTags.VOLLEY_ERROR, error.toString(), true);
                             NetworkResponse response = error.networkResponse;
                             if (response != null && response.data != null) {
-                                Utils.showLog (Log.ERROR, AppConfigTags.ERROR, new String (response.data), true);
+                                Utils.showLog(Log.ERROR, AppConfigTags.ERROR, new String(response.data), true);
                             }
-                            Utils.showSnackBar (MainActivity.this, clMain, getResources ().getString (R.string.snackbar_text_error_occurred), Snackbar.LENGTH_LONG, getResources ().getString (R.string.snackbar_action_dismiss), null);
+                            Utils.showSnackBar(MainActivity.this, clMain, getResources().getString(R.string.snackbar_text_error_occurred), Snackbar.LENGTH_LONG, getResources().getString(R.string.snackbar_action_dismiss), null);
                         }
                     }) {
 
                 @Override
-                protected Map<String, String> getParams () throws AuthFailureError {
+                protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new Hashtable<String, String>();
-                    Utils.showLog (Log.INFO, AppConfigTags.PARAMETERS_SENT_TO_THE_SERVER, "" + params, true);
+                    Utils.showLog(Log.INFO, AppConfigTags.PARAMETERS_SENT_TO_THE_SERVER, "" + params, true);
                     return params;
                 }
 
                 @Override
-                public Map<String, String> getHeaders () throws AuthFailureError {
+                public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
-                    UserDetailsPref userDetailsPref = UserDetailsPref.getInstance ();
-                    params.put (AppConfigTags.HEADER_API_KEY, Constants.api_key);
-                    params.put (AppConfigTags.HEADER_DRIVER_LOGIN_KEY, userDetailsPref.getStringPref (MainActivity.this, UserDetailsPref.DRIVER_LOGIN_KEY));
-                    Utils.showLog (Log.INFO, AppConfigTags.HEADERS_SENT_TO_THE_SERVER, "" + params, false);
+                    UserDetailsPref userDetailsPref = UserDetailsPref.getInstance();
+                    params.put(AppConfigTags.HEADER_API_KEY, Constants.api_key);
+                    params.put(AppConfigTags.HEADER_DRIVER_LOGIN_KEY, userDetailsPref.getStringPref(MainActivity.this, UserDetailsPref.DRIVER_LOGIN_KEY));
+                    Utils.showLog(Log.INFO, AppConfigTags.HEADERS_SENT_TO_THE_SERVER, "" + params, false);
                     return params;
                 }
             };
-            Utils.sendRequest (strRequest, 30);
+            Utils.sendRequest(strRequest, 30);
         } else {
-            Utils.showSnackBar (MainActivity.this, clMain, getResources ().getString (R.string.snackbar_text_no_internet_connection_available), Snackbar.LENGTH_LONG, getResources ().getString (R.string.snackbar_action_go_to_settings), new View.OnClickListener () {
+            Utils.showSnackBar(MainActivity.this, clMain, getResources().getString(R.string.snackbar_text_no_internet_connection_available), Snackbar.LENGTH_LONG, getResources().getString(R.string.snackbar_action_go_to_settings), new View.OnClickListener() {
                 @Override
-                public void onClick (View v) {
-                    Intent dialogIntent = new Intent (Settings.ACTION_SETTINGS);
-                    dialogIntent.addFlags (Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity (dialogIntent);
+                public void onClick(View v) {
+                    Intent dialogIntent = new Intent(Settings.ACTION_SETTINGS);
+                    dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(dialogIntent);
                 }
             });
         }
     }
 
-    public void OfflineBookingList () {
+    public void OfflineBookingList() {
         bookingList.clear();
 
         try {
 
-            JSONObject jsonObj = new JSONObject (userDetailsPref.getStringPref(MainActivity.this,UserDetailsPref.RESPONSE));
-            boolean is_error = jsonObj.getBoolean (AppConfigTags.ERROR);
-            String message = jsonObj.getString (AppConfigTags.MESSAGE);
-            if (! is_error) {
-                swipeRefreshLayout.setRefreshing (false);
-                JSONArray jsonArrayBooking = jsonObj.getJSONArray (AppConfigTags.BOOKINGS);
+            JSONObject jsonObj = new JSONObject(userDetailsPref.getStringPref(MainActivity.this, UserDetailsPref.RESPONSE));
+            boolean is_error = jsonObj.getBoolean(AppConfigTags.ERROR);
+            String message = jsonObj.getString(AppConfigTags.MESSAGE);
+            if (!is_error) {
+                swipeRefreshLayout.setRefreshing(false);
+                JSONArray jsonArrayBooking = jsonObj.getJSONArray(AppConfigTags.BOOKINGS);
 
-                for (int i = 0; i < jsonArrayBooking.length (); i++) {
-                    JSONObject jsonObjectBooking = jsonArrayBooking.getJSONObject (i);
-                    Booking booking = new Booking (
-                            jsonObjectBooking.getInt (AppConfigTags.BOOKING_ID),
-                            jsonObjectBooking.getString (AppConfigTags.BOOKING_STATUS),
-                            jsonObjectBooking.getString (AppConfigTags.CLIENT_NAME),
-                            jsonObjectBooking.getString (AppConfigTags.CLIENT_EMAIL),
-                            jsonObjectBooking.getString (AppConfigTags.CLIENT_PHONE),
-                            jsonObjectBooking.getString (AppConfigTags.PICKUP_LOCATION),
-                            jsonObjectBooking.getString (AppConfigTags.PICKUP_DATE),
-                            jsonObjectBooking.getString (AppConfigTags.PICKUP_TIME_START),
-                            jsonObjectBooking.getString (AppConfigTags.PICKUP_TIME_END),
-                            jsonObjectBooking.getString (AppConfigTags.DROP_LOCATION),
-                            jsonObjectBooking.getString (AppConfigTags.DROP_DATE),
-                            jsonObjectBooking.getString (AppConfigTags.DROP_TIME_START),
-                            jsonObjectBooking.getString (AppConfigTags.DROP_TIME_END),
-                            jsonObjectBooking.getInt (AppConfigTags.NO_OF_ITEMS),
-                            jsonObjectBooking.getString (AppConfigTags.NOTES),
-                            jsonObjectBooking.getString (AppConfigTags.COST),
-                            jsonObjectBooking.getJSONArray (AppConfigTags.ASSETS).toString()
+                for (int i = 0; i < jsonArrayBooking.length(); i++) {
+                    JSONObject jsonObjectBooking = jsonArrayBooking.getJSONObject(i);
+                    Booking booking = new Booking(
+                            jsonObjectBooking.getInt(AppConfigTags.BOOKING_ID),
+                            jsonObjectBooking.getString(AppConfigTags.BOOKING_STATUS),
+                            jsonObjectBooking.getString(AppConfigTags.CLIENT_NAME),
+                            jsonObjectBooking.getString(AppConfigTags.CLIENT_EMAIL),
+                            jsonObjectBooking.getString(AppConfigTags.CLIENT_PHONE),
+                            jsonObjectBooking.getString(AppConfigTags.PICKUP_LOCATION),
+                            jsonObjectBooking.getString(AppConfigTags.PICKUP_DATE),
+                            jsonObjectBooking.getString(AppConfigTags.PICKUP_TIME_START),
+                            jsonObjectBooking.getString(AppConfigTags.PICKUP_TIME_END),
+                            jsonObjectBooking.getString(AppConfigTags.DROP_LOCATION),
+                            jsonObjectBooking.getString(AppConfigTags.DROP_DATE),
+                            jsonObjectBooking.getString(AppConfigTags.DROP_TIME_START),
+                            jsonObjectBooking.getString(AppConfigTags.DROP_TIME_END),
+                            jsonObjectBooking.getInt(AppConfigTags.NO_OF_ITEMS),
+                            jsonObjectBooking.getString(AppConfigTags.NOTES),
+                            jsonObjectBooking.getString(AppConfigTags.COST),
+                            jsonObjectBooking.getJSONArray(AppConfigTags.ASSETS).toString()
                     );
-                    bookingList.add (i, booking);
+                    bookingList.add(i, booking);
                 }
-                bookingAdapter.notifyDataSetChanged ();
+                bookingAdapter.notifyDataSetChanged();
             }
         } catch (Exception e) {
-            e.printStackTrace ();
-            Utils.showSnackBar (MainActivity.this, clMain, getResources ().getString (R.string.snackbar_text_exception_occurred), Snackbar.LENGTH_LONG, getResources ().getString (R.string.snackbar_action_dismiss), null);
+            e.printStackTrace();
+            Utils.showSnackBar(MainActivity.this, clMain, getResources().getString(R.string.snackbar_text_exception_occurred), Snackbar.LENGTH_LONG, getResources().getString(R.string.snackbar_action_dismiss), null);
 
         }
     }
@@ -486,7 +507,7 @@ public class MainActivity extends AppCompatActivity {
                                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                                 break;
                             case 3:
-                                   showLogOutDialog ();
+                                showLogOutDialog();
                                 break;
                         }
                         return false;
@@ -496,69 +517,69 @@ public class MainActivity extends AppCompatActivity {
 //        result.getActionBarDrawerToggle ().setDrawerIndicatorEnabled (false);
     }
 
-    private void showLogOutDialog () {
-        MaterialDialog dialog = new MaterialDialog.Builder (this)
-                .limitIconToDefaultSize ()
-                .content ("Do you wish to Sign Out?")
-                .positiveText ("Yes")
-                .negativeText ("No")
+    private void showLogOutDialog() {
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .limitIconToDefaultSize()
+                .content("Do you wish to Sign Out?")
+                .positiveText("Yes")
+                .negativeText("No")
 
-                .typeface (SetTypeFace.getTypeface (MainActivity.this), SetTypeFace.getTypeface (MainActivity.this))
-                .onPositive (new MaterialDialog.SingleButtonCallback () {
+                .typeface(SetTypeFace.getTypeface(MainActivity.this), SetTypeFace.getTypeface(MainActivity.this))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
-                    public void onClick (@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         userDetailsPref.putStringPref(MainActivity.this, UserDetailsPref.DRIVER_NAME, "");
-                        userDetailsPref.putStringPref(MainActivity.this, UserDetailsPref.DRIVER_ID,"");
-                        userDetailsPref.putStringPref(MainActivity.this, UserDetailsPref.DRIVER_EMAIL,"");
+                        userDetailsPref.putStringPref(MainActivity.this, UserDetailsPref.DRIVER_ID, "");
+                        userDetailsPref.putStringPref(MainActivity.this, UserDetailsPref.DRIVER_EMAIL, "");
                         userDetailsPref.putStringPref(MainActivity.this, UserDetailsPref.DRIVER_LOGIN_KEY, "");
-                        Intent intent = new Intent (MainActivity.this, LoginActivity.class);
-                        intent.setFlags (Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity (intent);
-                        overridePendingTransition (R.anim.slide_in_left, R.anim.slide_out_right);
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                     }
-                }).build ();
-        dialog.show ();
+                }).build();
+        dialog.show();
     }
 
-    private void startScan () {
+    private void startScan() {
         final MaterialBarcodeScanner materialBarcodeScanner = new MaterialBarcodeScannerBuilder()
-                .withActivity (MainActivity.this)
-                .withEnableAutoFocus (true)
-                .withBleepEnabled (true)
-                .withBackfacingCamera ()
-                .withCenterTracker ()
-                .withText ("Place the barcode in center")
+                .withActivity(MainActivity.this)
+                .withEnableAutoFocus(true)
+                .withBleepEnabled(true)
+                .withBackfacingCamera()
+                .withCenterTracker()
+                .withText("Place the barcode in center")
                 //.withCenterTracker (R.drawable.barcode_scan_default, R.drawable.barcode_scan_pass)
-                .withResultListener (new MaterialBarcodeScanner.OnResultListener () {
+                .withResultListener(new MaterialBarcodeScanner.OnResultListener() {
                     @Override
-                    public void onResult (Barcode barcode) {
+                    public void onResult(Barcode barcode) {
 
                         barcodeResult = barcode;
                         getScannedData(String.valueOf(barcode.rawValue));
                     }
                 })
-                .build ();
-        materialBarcodeScanner.startScan ();
+                .build();
+        materialBarcodeScanner.startScan();
     }
 
-    public void checkPermissions () {
+    public void checkPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission (Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || checkSelfPermission (WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions (new String[] {Manifest.permission.CAMERA, Manifest.permission.INTERNET, WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || checkSelfPermission(WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.INTERNET, WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
             }
         }
     }
 
     @Override
     @TargetApi(23)
-    public void onRequestPermissionsResult (int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult (requestCode, permissions, grantResults);
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_CODE) {
             for (int i = 0, len = permissions.length; i < len; i++) {
                 String permission = permissions[i];
                 if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                    boolean showRationale = shouldShowRequestPermissionRationale (permission);
-                    if (! showRationale) {
+                    boolean showRationale = shouldShowRequestPermissionRationale(permission);
+                    if (!showRationale) {
                         /*android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder (MainActivity.this);
                         builder.setMessage ("Permission are required please enable them on the App Setting page")
                                 .setCancelable (false)
@@ -578,14 +599,14 @@ public class MainActivity extends AppCompatActivity {
                         // or open another dialog explaining
                         // again the permission and directing to
                         // the app setting
-                    } else if (Manifest.permission.CAMERA.equals (permission)) {
+                    } else if (Manifest.permission.CAMERA.equals(permission)) {
 //                        Utils.showToast (this, "Camera Permission is required");
 //                        showRationale (permission, R.string.permission_denied_contacts);
                         // user denied WITHOUT never ask again
                         // this is a good place to explain the user
                         // why you need the permission and ask if he want
                         // to accept it (the rationale)
-                    } else if (WRITE_EXTERNAL_STORAGE.equals (permission)) {
+                    } else if (WRITE_EXTERNAL_STORAGE.equals(permission)) {
 //                        Utils.showToast (this, "Write Permission is required");
 //                        showRationale (permission, R.string.permission_denied_contacts);
                         // user denied WITHOUT never ask again
@@ -601,79 +622,78 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    private void getScannedData (final String scan_value) {
-        if (NetworkConnection.isNetworkAvailable (MainActivity.this)) {
-            Utils.showProgressDialog (progressDialog, getResources ().getString (R.string.progress_dialog_text_please_wait), true);
-            Utils.showLog (Log.INFO, "" + AppConfigTags.URL, AppConfigURL.SCAN_PRODUCT, true);
-            StringRequest strRequest1 = new StringRequest (Request.Method.POST, AppConfigURL.SCAN_PRODUCT,
-                    new com.android.volley.Response.Listener<String> () {
+    private void getScannedData(final String scan_value) {
+        if (NetworkConnection.isNetworkAvailable(MainActivity.this)) {
+            Utils.showProgressDialog(progressDialog, getResources().getString(R.string.progress_dialog_text_please_wait), true);
+            Utils.showLog(Log.INFO, "" + AppConfigTags.URL, AppConfigURL.SCAN_PRODUCT, true);
+            StringRequest strRequest1 = new StringRequest(Request.Method.POST, AppConfigURL.SCAN_PRODUCT,
+                    new com.android.volley.Response.Listener<String>() {
                         @Override
-                        public void onResponse (String response) {
-                            Utils.showLog (Log.INFO, AppConfigTags.SERVER_RESPONSE, response, true);
+                        public void onResponse(String response) {
+                            Utils.showLog(Log.INFO, AppConfigTags.SERVER_RESPONSE, response, true);
                             if (response != null) {
                                 try {
                                     JSONObject jsonObj = new JSONObject(response);
-                                    boolean error = jsonObj.getBoolean (AppConfigTags.ERROR);
-                                    String message = jsonObj.getString (AppConfigTags.MESSAGE);
-                                    if (! error) {
-                                        Intent intent = new Intent (MainActivity.this, ScanDetailActivity.class);
-                                        intent.putExtra ("response", response);
-                                        startActivity (intent);
+                                    boolean error = jsonObj.getBoolean(AppConfigTags.ERROR);
+                                    String message = jsonObj.getString(AppConfigTags.MESSAGE);
+                                    if (!error) {
+                                        Intent intent = new Intent(MainActivity.this, ScanDetailActivity.class);
+                                        intent.putExtra("response", response);
+                                        startActivity(intent);
 
                                     } else {
-                                        Utils.showSnackBar (MainActivity.this, clMain, message, Snackbar.LENGTH_LONG, null, null);
+                                        Utils.showSnackBar(MainActivity.this, clMain, message, Snackbar.LENGTH_LONG, null, null);
                                     }
-                                    progressDialog.dismiss ();
+                                    progressDialog.dismiss();
                                 } catch (Exception e) {
-                                    progressDialog.dismiss ();
-                                    Utils.showSnackBar (MainActivity.this, clMain, getResources ().getString (R.string.snackbar_text_exception_occurred), Snackbar.LENGTH_LONG, getResources ().getString (R.string.snackbar_action_dismiss), null);
-                                    e.printStackTrace ();
+                                    progressDialog.dismiss();
+                                    Utils.showSnackBar(MainActivity.this, clMain, getResources().getString(R.string.snackbar_text_exception_occurred), Snackbar.LENGTH_LONG, getResources().getString(R.string.snackbar_action_dismiss), null);
+                                    e.printStackTrace();
                                 }
                             } else {
-                                Utils.showSnackBar (MainActivity.this, clMain, getResources ().getString (R.string.snackbar_text_error_occurred), Snackbar.LENGTH_LONG, getResources ().getString (R.string.snackbar_action_dismiss), null);
-                                Utils.showLog (Log.WARN, AppConfigTags.SERVER_RESPONSE, AppConfigTags.DIDNT_RECEIVE_ANY_DATA_FROM_SERVER, true);
+                                Utils.showSnackBar(MainActivity.this, clMain, getResources().getString(R.string.snackbar_text_error_occurred), Snackbar.LENGTH_LONG, getResources().getString(R.string.snackbar_action_dismiss), null);
+                                Utils.showLog(Log.WARN, AppConfigTags.SERVER_RESPONSE, AppConfigTags.DIDNT_RECEIVE_ANY_DATA_FROM_SERVER, true);
                             }
-                            progressDialog.dismiss ();
+                            progressDialog.dismiss();
                         }
                     },
-                    new com.android.volley.Response.ErrorListener () {
+                    new com.android.volley.Response.ErrorListener() {
                         @Override
-                        public void onErrorResponse (VolleyError error) {
-                            Utils.showLog (Log.ERROR, AppConfigTags.VOLLEY_ERROR, error.toString (), true);
+                        public void onErrorResponse(VolleyError error) {
+                            Utils.showLog(Log.ERROR, AppConfigTags.VOLLEY_ERROR, error.toString(), true);
                             NetworkResponse response = error.networkResponse;
                             if (response != null && response.data != null) {
-                                Utils.showLog (Log.ERROR, AppConfigTags.ERROR, new String(response.data), true);
+                                Utils.showLog(Log.ERROR, AppConfigTags.ERROR, new String(response.data), true);
                             }
-                            Utils.showSnackBar (MainActivity.this, clMain, getResources ().getString (R.string.snackbar_text_error_occurred), Snackbar.LENGTH_LONG, getResources ().getString (R.string.snackbar_action_dismiss), null);
-                            progressDialog.dismiss ();
+                            Utils.showSnackBar(MainActivity.this, clMain, getResources().getString(R.string.snackbar_text_error_occurred), Snackbar.LENGTH_LONG, getResources().getString(R.string.snackbar_action_dismiss), null);
+                            progressDialog.dismiss();
                         }
                     }) {
                 @Override
-                protected Map<String, String> getParams () throws AuthFailureError {
+                protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new Hashtable<String, String>();
-                    params.put (AppConfigTags.BARCODE_VALUE, scan_value);
+                    params.put(AppConfigTags.BARCODE_VALUE, scan_value);
 
-                    Utils.showLog (Log.INFO, AppConfigTags.PARAMETERS_SENT_TO_THE_SERVER, "" + params, true);
+                    Utils.showLog(Log.INFO, AppConfigTags.PARAMETERS_SENT_TO_THE_SERVER, "" + params, true);
                     return params;
                 }
 
                 @Override
-                public Map<String, String> getHeaders () throws AuthFailureError {
+                public Map<String, String> getHeaders() throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
-                    params.put (AppConfigTags.HEADER_API_KEY, Constants.api_key);
-                    Utils.showLog (Log.INFO, AppConfigTags.HEADERS_SENT_TO_THE_SERVER, "" + params, false);
+                    params.put(AppConfigTags.HEADER_API_KEY, Constants.api_key);
+                    Utils.showLog(Log.INFO, AppConfigTags.HEADERS_SENT_TO_THE_SERVER, "" + params, false);
                     return params;
                 }
             };
-            Utils.sendRequest (strRequest1, 60);
+            Utils.sendRequest(strRequest1, 60);
         } else {
-            Utils.showSnackBar (this, clMain, getResources ().getString (R.string.snackbar_text_no_internet_connection_available), Snackbar.LENGTH_LONG, getResources ().getString (R.string.snackbar_action_go_to_settings), new View.OnClickListener () {
+            Utils.showSnackBar(this, clMain, getResources().getString(R.string.snackbar_text_no_internet_connection_available), Snackbar.LENGTH_LONG, getResources().getString(R.string.snackbar_action_go_to_settings), new View.OnClickListener() {
                 @Override
-                public void onClick (View v) {
+                public void onClick(View v) {
                     Intent dialogIntent = new Intent(Settings.ACTION_SETTINGS);
-                    dialogIntent.addFlags (Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity (dialogIntent);
+                    dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(dialogIntent);
                 }
             });
         }
