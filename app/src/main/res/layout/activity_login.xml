@@ -47,7 +47,7 @@
                     android:paddingLeft="@dimen/activity_margin"
                     android:paddingStart="@dimen/activity_margin"
                     android:text="Sign Up"
-                    android:textColor="@color/primary_text2"
+                    android:textColor="@color/primary_text"
                     android:textSize="@dimen/text_size_title_app_name"
                     android:textStyle="bold"/>
                 <Button
@@ -74,7 +74,7 @@
         android:id="@+id/rlMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="@color/primary"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -112,8 +112,8 @@
                         android:layout_marginBottom="@dimen/activity_margin"
                         android:gravity="center"
                         android:padding="@dimen/activity_margin_small"
-                        android:text="Enter your details to get started"
-                        android:textColor="@color/primary_text2"
+                        android:text="Login"
+                        android:textColor="@color/primary_text"
                         android:textSize="@dimen/text_size_large"
                         android:textStyle="bold"/>
 
@@ -121,8 +121,8 @@
                         android:id="@+id/tvUserName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="User Name"
-                        android:textColor="@color/primary_text2"
+                        android:text="Username"
+                        android:textColor="@color/primary_text"
                         android:textSize="@dimen/text_size_small"
                         android:visibility="visible"/>
                     <EditText
@@ -132,8 +132,8 @@
                         android:layout_marginBottom="@dimen/activity_margin"
                         android:background="@drawable/et_background"
                         android:inputType="textEmailAddress"
-                        android:textColor="@color/primary_text2"
-                        android:textSize="@dimen/text_size_large"
+                        android:textColor="@color/primary_text"
+                        android:textSize="@dimen/text_size_medium"
                         android:textStyle="bold"
                         android:visibility="visible"/>
                     <TextView
@@ -141,18 +141,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Password"
-                        android:textColor="@color/primary_text2"
+                        android:textColor="@color/primary_text"
                         android:textSize="@dimen/text_size_small"
                         android:visibility="visible"/>
                     <EditText
                         android:id="@+id/etPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/activity_margin"
                         android:background="@drawable/et_background"
                         android:inputType="textPassword"
-                        android:textColor="@color/primary_text2"
-                        android:textSize="@dimen/text_size_large"
+                        android:textColor="@color/primary_text"
+                        android:textSize="@dimen/text_size_medium"
                         android:textStyle="bold"
                         android:visibility="visible"/>
 
@@ -163,8 +162,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Forgot Password"
-                        android:textColor="@color/primary_text2"
+                        android:textColor="@color/primary_text"
                         android:textSize="@dimen/text_size_small"
+                        android:paddingTop="@dimen/activity_margin_small"
+                        android:paddingBottom="@dimen/activity_margin_small"
+                        android:paddingLeft="@dimen/activity_margin_small"
                         android:visibility="visible"
                         android:layout_gravity="right"/>
                 </LinearLayout>

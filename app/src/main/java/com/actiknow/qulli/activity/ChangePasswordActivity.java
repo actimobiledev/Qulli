@@ -75,7 +75,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         etNewPassword = (EditText) findViewById(R.id.etNewPassword);
         etOldPassword = (EditText) findViewById(R.id.etOldPassword);
         etConfirmPassword = (EditText) findViewById(R.id.etConfirmPassword);
-        tvSubmit=(TextView)findViewById(R.id.buttonUpload);
+        tvSubmit=(TextView)findViewById(R.id.tvSubmit);
         rlBack=(RelativeLayout)findViewById(R.id.rlBack);
 
 

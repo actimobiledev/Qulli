@@ -31,7 +31,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:text="Booking Id : 89"
-                    android:textColor="@color/primary_text2"
+                    android:textColor="@color/primary_text"
                     android:textSize="@dimen/text_size_medium"
                     android:textStyle="bold"
                     android:visibility="visible"
@@ -46,7 +46,7 @@
                     android:layout_below="@+id/tvBookingId"
                     android:layout_gravity="center"
                     android:text="Pickup"
-                    android:textColor="@color/secondary_text2"
+                    android:textColor="@color/secondary_text"
                     android:textSize="@dimen/text_size_extra_small"
                     android:visibility="gone" />
 
@@ -59,7 +59,7 @@
                     android:layout_below="@+id/tvBookingStatus"
                     android:layout_gravity="center"
                     android:text="Actiknow Business Consulting"
-                    android:textColor="@color/secondary_text2"
+                    android:textColor="@color/secondary_text"
                     android:textSize="@dimen/text_size_extra_small"
                     android:visibility="gone" />
 
@@ -71,7 +71,7 @@
                     android:layout_gravity="center"
                     android:paddingRight="@dimen/activity_horizontal_margin"
                     android:text="rahul.badkul@gmail.com"
-                    android:textColor="@color/secondary_text2"
+                    android:textColor="@color/secondary_text"
                     android:textSize="@dimen/text_size_extra_small"
                     android:visibility="gone" />
 
@@ -84,7 +84,7 @@
                     android:maxEms="10"
                     android:paddingRight="@dimen/activity_horizontal_margin"
                     android:text="963698745"
-                    android:textColor="@color/secondary_text2"
+                    android:textColor="@color/secondary_text"
                     android:textSize="@dimen/text_size_extra_small"
                     android:visibility="gone" />
 
@@ -118,7 +118,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:text="PickUp :"
-                        android:textColor="@color/primary_text2"
+                        android:textColor="@color/primary_text"
                         android:textSize="@dimen/text_size_medium"
                         android:textStyle="bold"
                         android:visibility="visible" />
@@ -133,7 +133,7 @@
                         android:layout_below="@+id/tvPickup"
                         android:layout_gravity="center"
                         android:text="Actiknow Business Consultin"
-                        android:textColor="@color/secondary_text2"
+                        android:textColor="@color/secondary_text"
                         android:textSize="@dimen/text_size_extra_small"
                         android:visibility="gone" />
 
@@ -145,7 +145,7 @@
                         android:layout_gravity="center"
                         android:paddingRight="@dimen/activity_horizontal_margin"
                         android:text="10:40 - 12:40"
-                        android:textColor="@color/secondary_text2"
+                        android:textColor="@color/secondary_text"
                         android:textSize="@dimen/text_size_extra_small"
                         android:visibility="visible" />
 
@@ -158,7 +158,7 @@
                         android:maxEms="10"
                         android:paddingRight="@dimen/activity_horizontal_margin"
                         android:text="963698745"
-                        android:textColor="@color/secondary_text2"
+                        android:textColor="@color/secondary_text"
                         android:textSize="@dimen/text_size_extra_small"
                         android:visibility="visible" />
 
@@ -184,7 +184,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:text="Drop Off :"
-                        android:textColor="@color/primary_text2"
+                        android:textColor="@color/primary_text"
                         android:textSize="@dimen/text_size_medium"
                         android:textStyle="bold"
                         android:visibility="visible" />
@@ -199,7 +199,7 @@
                         android:layout_below="@+id/tvDropOff"
                         android:layout_gravity="center"
                         android:text="Actiknow Business Consulting"
-                        android:textColor="@color/secondary_text2"
+                        android:textColor="@color/secondary_text"
                         android:textSize="@dimen/text_size_extra_small"
                         android:visibility="visible" />
 
@@ -211,7 +211,7 @@
                         android:layout_gravity="center"
                         android:paddingRight="@dimen/activity_horizontal_margin"
                         android:text="10:40 - 12:40"
-                        android:textColor="@color/secondary_text2"
+                        android:textColor="@color/secondary_text"
                         android:textSize="@dimen/text_size_extra_small"
                         android:visibility="visible" />
 
@@ -224,7 +224,7 @@
                         android:maxEms="10"
                         android:paddingRight="@dimen/activity_horizontal_margin"
                         android:text="963698745"
-                        android:textColor="@color/secondary_text2"
+                        android:textColor="@color/secondary_text"
                         android:textSize="@dimen/text_size_extra_small"
                         android:visibility="visible" />
 
@@ -241,7 +241,7 @@
                 android:layout_below="@+id/llPickDropInfo"
                 android:layout_marginTop="@dimen/activity_margin_extra_small"
                 android:text="No Of Items :"
-                android:textColor="@color/primary_text2"
+                android:textColor="@color/primary_text"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 android:visibility="visible"
@@ -255,7 +255,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/tvNoOfItems"
                 android:text="No Of Items Scan:"
-                android:textColor="@color/primary_text2"
+                android:textColor="@color/primary_text"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 android:visibility="gone"

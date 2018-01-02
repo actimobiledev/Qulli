@@ -233,9 +233,9 @@ public class ScanDetailActivity extends AppCompatActivity {
                                     if (! error) {
                                         MaterialDialog dialog = new MaterialDialog.Builder (ScanDetailActivity.this)
                                                 .content (message)
-                                                .positiveColor (getResources ().getColor (R.color.primary_text2))
-                                                .contentColor (getResources ().getColor (R.color.primary_text2))
-                                                .negativeColor (getResources ().getColor (R.color.primary_text2))
+                                                .positiveColor (getResources ().getColor (R.color.primary_text))
+                                                .contentColor (getResources ().getColor (R.color.primary_text))
+                                                .negativeColor (getResources ().getColor (R.color.primary_text))
                                                 .canceledOnTouchOutside (true)
                                                 .cancelable (true)
                                                 .positiveText ("OK")

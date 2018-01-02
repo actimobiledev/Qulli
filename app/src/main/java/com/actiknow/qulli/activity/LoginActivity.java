@@ -2,14 +2,9 @@
 package com.actiknow.qulli.activity;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.DrawableRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -22,8 +17,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.actiknow.qulli.R;
 import com.actiknow.qulli.utils.AppConfigTags;
 import com.actiknow.qulli.utils.AppConfigURL;
@@ -34,12 +29,12 @@ import com.actiknow.qulli.utils.TypefaceSpan;
 import com.actiknow.qulli.utils.UserDetailsPref;
 import com.actiknow.qulli.utils.Utils;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.bumptech.glide.Glide;
 
 import org.json.JSONObject;
 
@@ -149,8 +144,10 @@ public class LoginActivity extends AppCompatActivity {
     private void showForgotPasswordDialog() {
         MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .content(getResources().getString(R.string.dialog_text_enter_username))
-                .contentColor(getResources().getColor(R.color.text_color_black))
+                .theme (Theme.LIGHT)
+                .contentColor(getResources().getColor(R.color.primary_text))
                 .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
+                .positiveColor (getResources ().getColor (R.color.primary_text))
                 .typeface(SetTypeFace.getTypeface(this), SetTypeFace.getTypeface(this))
                 .input("", "", new MaterialDialog.InputCallback() {
                     @Override
@@ -159,6 +156,7 @@ public class LoginActivity extends AppCompatActivity {
                         sendForgotPasswordRequestToServer(input.toString());
                     }
                 }).build();
+        
         dialog.show();
     }
 

@@ -65,7 +65,7 @@
     <string name="dialog_hint_optional">optional</string>
 
     <string name="dialog_action_yes">YES</string>
-    <string name="dialog_text_enter_username">ENTER THE USER NAME</string>
+    <string name="dialog_text_enter_username">Please enter the username</string>
     <string name="dialog_action_no">NO</string>
     <string name="dialog_action_ok">OK</string>
     <string name="dialog_action_cancel">CANCEL</string>

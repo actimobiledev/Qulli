@@ -161,8 +161,8 @@ public class Utils {
         sbView.setBackgroundColor (activity.getResources ().getColor (R.color.colorPrimary));
         TextView textView = (TextView) sbView.findViewById (android.support.design.R.id.snackbar_text);
         TextView textView2 = (TextView) sbView.findViewById (android.support.design.R.id.snackbar_action);
-        textView.setTextColor (activity.getResources ().getColor (R.color.tertiary_text2));
-        textView2.setTextColor (activity.getResources ().getColor (R.color.tertiary_text2));
+        textView.setTextColor (activity.getResources ().getColor (R.color.tertiary_text));
+        textView2.setTextColor (activity.getResources ().getColor (R.color.tertiary_text));
         textView.setTypeface (SetTypeFace.getTypeface (activity));
         textView2.setTypeface (SetTypeFace.getTypeface (activity));
         snackbar.show ();
