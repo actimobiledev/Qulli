@@ -39,11 +39,9 @@ import java.util.Map;
 
 
 public class ChangePasswordActivity extends AppCompatActivity {
-
     CoordinatorLayout clMain;
     ProgressDialog progressDialog;
     UserDetailsPref userDetailsPref;
-
     EditText etOldPassword;
     EditText etNewPassword;
     EditText etConfirmPassword;
@@ -57,30 +55,21 @@ public class ChangePasswordActivity extends AppCompatActivity {
         initView();
         initData();
         initListener();
-
-
     }
-
-
     private void initData() {
         progressDialog = new ProgressDialog(ChangePasswordActivity.this);
         Utils.setTypefaceToAllViews(this, clMain);
         userDetailsPref = UserDetailsPref.getInstance();
-
     }
 
     private void initView() {
-
         clMain = (CoordinatorLayout) findViewById(R.id.clMain);
         etNewPassword = (EditText) findViewById(R.id.etNewPassword);
         etOldPassword = (EditText) findViewById(R.id.etOldPassword);
         etConfirmPassword = (EditText) findViewById(R.id.etConfirmPassword);
         tvSubmit=(TextView)findViewById(R.id.tvSubmit);
         rlBack=(RelativeLayout)findViewById(R.id.rlBack);
-
-
     }
-
     private void initListener() {
         rlBack.setOnClickListener (new View.OnClickListener () {
             @Override
@@ -89,8 +78,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 overridePendingTransition (R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
-
-
         etNewPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -98,11 +85,9 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     etNewPassword.setError(null);
                 }
             }
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -114,11 +99,9 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     etOldPassword.setError(null);
                 }
             }
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -130,17 +113,13 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     etConfirmPassword.setError(null);
                 }
             }
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-
             @Override
             public void afterTextChanged(Editable s) {
             }
         });
-
-
         tvSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,7 +128,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 s1.setSpan(new TypefaceSpan(ChangePasswordActivity.this, Constants.font_name), 0, s1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 SpannableString s2 = new SpannableString(getResources().getString(R.string.Password_not_matched));
                 s1.setSpan(new TypefaceSpan(ChangePasswordActivity.this, Constants.font_name), 0, s1.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
                 if (etOldPassword.getText().toString().trim().length() == 0 && etNewPassword.getText().toString().length() == 0 && etOldPassword.getText().toString().length() == 0) {
                     etNewPassword.setError(s1);
                     etOldPassword.setError(s1);
@@ -158,17 +136,11 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     etConfirmPassword.setError(s2);
                 } else {
                      sendChangePasswordCredentialsToServer(etOldPassword.getText().toString().trim(), etNewPassword.getText().toString().trim());
-
                 }
-
 
             }
         });
-
-
     }
-
-
     private void sendChangePasswordCredentialsToServer (final String old_password,final String new_password) {
         if (NetworkConnection.isNetworkAvailable (ChangePasswordActivity.this)) {
             Utils.showProgressDialog (progressDialog, getResources ().getString (R.string.progress_dialog_text_please_wait), true);
@@ -188,7 +160,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
                                         finish();
                                     } else {
                                         Utils.showSnackBar (ChangePasswordActivity.this, clMain, message, Snackbar.LENGTH_LONG, null, null);
-
                                     }
                                     progressDialog.dismiss ();
                                 } catch (Exception e) {
@@ -220,11 +191,9 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     Map<String, String> params = new Hashtable<String, String>();
                     params.put (AppConfigTags.OLD_PASSWORD, old_password);
                     params.put (AppConfigTags.NEW_PASSWORD, new_password);
-
                     Utils.showLog (Log.INFO, AppConfigTags.PARAMETERS_SENT_TO_THE_SERVER, "" + params, true);
                     return params;
                 }
-
                 @Override
                 public Map<String, String> getHeaders () throws AuthFailureError {
                     Map<String, String> params = new HashMap<>();
@@ -246,6 +215,4 @@ public class ChangePasswordActivity extends AppCompatActivity {
             });
         }
     }
-
-
 }

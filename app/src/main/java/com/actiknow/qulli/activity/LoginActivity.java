@@ -63,13 +63,11 @@ public class LoginActivity extends AppCompatActivity {
         initListener();
 
     }
-
     private void initData() {
         userDetailsPref = UserDetailsPref.getInstance();
         progressDialog = new ProgressDialog(LoginActivity.this);
 
     }
-
     private void initView() {
         clMain = (CoordinatorLayout) findViewById(R.id.clMain);
         tvUsername = (TextView) findViewById(R.id.tvUserName);
@@ -79,7 +77,6 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.etPassword);
         ivNext = (ImageView) findViewById(R.id.ivNext);
     }
-
     private void initListener() {
         ivNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,11 +99,9 @@ public class LoginActivity extends AppCompatActivity {
                     etUserName.setError(null);
                 }
             }
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -118,11 +113,9 @@ public class LoginActivity extends AppCompatActivity {
                     etPassword.setError(null);
                 }
             }
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -134,7 +127,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
     private void showForgotPasswordDialog() {
         MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .content(getResources().getString(R.string.dialog_text_enter_username))
@@ -152,7 +144,6 @@ public class LoginActivity extends AppCompatActivity {
                 }).build();
         dialog.show();
     }
-    
     private void sendForgotPasswordRequestToServer (final String user_name) {
         if (NetworkConnection.isNetworkAvailable (LoginActivity.this)) {
             Utils.showProgressDialog (progressDialog, getResources ().getString (R.string.progress_dialog_text_please_wait), true);
@@ -225,7 +216,6 @@ public class LoginActivity extends AppCompatActivity {
             });
         }
     }
-
     private void sendLoginDetailsToServer (final String user_name, final String password) {
         if (NetworkConnection.isNetworkAvailable (LoginActivity.this)) {
             Utils.showProgressDialog (progressDialog, getResources ().getString (R.string.progress_dialog_text_please_wait), true);
@@ -311,7 +301,7 @@ public class LoginActivity extends AppCompatActivity {
             });
         }
     }
-    
+
     @Override
     public void onBackPressed () {
         Intent intent = new Intent();

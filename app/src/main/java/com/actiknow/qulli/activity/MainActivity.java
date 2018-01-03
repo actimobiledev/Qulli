@@ -108,13 +108,11 @@ public class MainActivity extends AppCompatActivity {
         initDrawer();
 
     }
-
     @Override
     protected void onResume() {
         BookingList();
         super.onResume();
     }
-
     private void isLogin() {
         userDetailsPref = UserDetailsPref.getInstance();
         if (userDetailsPref.getStringPref(MainActivity.this, UserDetailsPref.DRIVER_LOGIN_KEY).length() == 0) {
@@ -160,10 +158,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -172,8 +166,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     OfflineBookingList();
                 }
-
-
             }
         });
         ivNavigation.setOnClickListener(new View.OnClickListener() {
@@ -547,7 +539,9 @@ public class MainActivity extends AppCompatActivity {
                 .withBleepEnabled(true)
                 .withBackfacingCamera()
                 .withCenterTracker()
+                .withEnableAutoFocus(true)
                 .withText("Place the barcode in center")
+
                 //.withCenterTracker (R.drawable.barcode_scan_default, R.drawable.barcode_scan_pass)
                 .withResultListener(new MaterialBarcodeScanner.OnResultListener() {
                     @Override

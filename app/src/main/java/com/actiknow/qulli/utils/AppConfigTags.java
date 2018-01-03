@@ -63,7 +63,10 @@ public class AppConfigTags {
     public static final String ASSETS = "assets";
     public static final String AVAILABLE_STATUS = "available_status";
     public static final String STATUS_ID = "status_id";
+    public static final String ATTRIBUTE_ID = "attribute_id";
     public static final String STATUS_TEXT = "status_text";
+    public static final String ASSET_BARCODE = "asset_barcode";
+    public static final String ASSET_STATUS = "asset_status";
 
 }
 

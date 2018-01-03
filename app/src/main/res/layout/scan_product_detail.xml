@@ -340,7 +340,7 @@
                     android:layout_marginTop="@dimen/activity_margin"
                     android:background="@drawable/edit_text_background"
                     android:padding="@dimen/activity_margin_small"
-                    android:text="Update Delivery Status"
+                    android:text="Update Asset Status"
                     android:textSize="@dimen/text_size_medium"
                     android:textStyle="bold"
                     android:visibility="visible"/>

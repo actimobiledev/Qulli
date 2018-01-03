@@ -5,6 +5,10 @@ import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -16,10 +20,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actiknow.qulli.R;
+import com.actiknow.qulli.activity.MainActivity;
+import com.actiknow.qulli.adapter.AssetsAdapter;
+import com.actiknow.qulli.adapter.BookingAdapter;
+import com.actiknow.qulli.model.Assets;
 import com.actiknow.qulli.utils.AppConfigTags;
 import com.actiknow.qulli.utils.AppConfigURL;
 import com.actiknow.qulli.utils.Constants;
 import com.actiknow.qulli.utils.NetworkConnection;
+import com.actiknow.qulli.utils.RecyclerViewMargin;
 import com.actiknow.qulli.utils.Utils;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -34,15 +43,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 public class BookingDetailFragment extends DialogFragment {
    // ImageView ivCancel;
-
-
-
     TextView tvBookingId;
     TextView tvBookingStatus;
     TextView tvClientName;
@@ -70,6 +78,10 @@ public class BookingDetailFragment extends DialogFragment {
     int numberOfItem;
     JSONArray jsonArrayAsset;
     private Barcode barcodeResult;
+    AssetsAdapter assetsAdapter;
+    RecyclerView rvAssetList;
+
+    List<Assets> assetsList = new ArrayList<>();
 
     public BookingDetailFragment newInstance(String response, int booking_id) {
         BookingDetailFragment f = new BookingDetailFragment();
@@ -133,6 +145,7 @@ public class BookingDetailFragment extends DialogFragment {
         initBundle();
         initData();
         initListener();
+        initAdapter();
         setData();
         return root;
     }
@@ -159,6 +172,7 @@ public class BookingDetailFragment extends DialogFragment {
         tvScan = (TextView) root.findViewById(R.id.tvScan);
         ivAddAsset = (ImageView) root.findViewById(R.id.ivAddAsset);
         ivCancel = (ImageView) root.findViewById (R.id.ivCancel);
+        rvAssetList=(RecyclerView)root.findViewById(R.id.rvBarcodeValueList);
     }
 
     private void initBundle() {
@@ -170,6 +184,16 @@ public class BookingDetailFragment extends DialogFragment {
     private void initData() {
         Utils.setTypefaceToAllViews(getActivity(), tvTitle);
         progressDialog=new ProgressDialog(getActivity());
+    }
+
+    private void initAdapter() {
+        assetsAdapter = new AssetsAdapter(getActivity(), assetsList);
+        rvAssetList.setAdapter(assetsAdapter);
+        rvAssetList.setHasFixedSize(true);
+        rvAssetList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        rvAssetList.setLayoutManager (new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false));
+        rvAssetList.setItemAnimator (new DefaultItemAnimator ());
+        rvAssetList.addItemDecoration (new RecyclerViewMargin ((int) Utils.pxFromDp (getActivity(), 16), (int) Utils.pxFromDp (getActivity(), 16), (int) Utils.pxFromDp (getActivity(), 16), (int) Utils.pxFromDp (getActivity(), 16), 2, 0, RecyclerViewMargin.LAYOUT_MANAGER_GRID, RecyclerViewMargin.ORIENTATION_VERTICAL));
     }
 
     private void initListener() {
@@ -237,6 +261,13 @@ public class BookingDetailFragment extends DialogFragment {
                     scanItem= jsonArrayAsset.length();
                     tvNoOfItemsScan.setText("Item Scanned : "+scanItem);
 
+                    for (int j=0; j<jsonArrayAsset.length();j++){
+                        JSONObject jsonObject=jsonArrayAsset.getJSONObject(j);
+                        assetsList.add(new Assets(jsonObject.getString(AppConfigTags.ASSET_BARCODE),jsonObject.getString(AppConfigTags.ASSET_STATUS)));
+
+                    }
+                    assetsAdapter.notifyDataSetChanged();
+
 
                 }
 
@@ -263,8 +294,15 @@ public class BookingDetailFragment extends DialogFragment {
                                     boolean error = jsonObj.getBoolean (AppConfigTags.ERROR);
                                     String message = jsonObj.getString (AppConfigTags.MESSAGE);
                                     if (! error) {
+                                        assetsList.clear();
                                        // getDialog().dismiss();
                                         jsonArrayAsset = new JSONArray (jsonObj.getString (AppConfigTags.ASSETS));
+                                        for (int j=0; j<jsonArrayAsset.length();j++){
+                                            JSONObject jsonObject=jsonArrayAsset.getJSONObject(j);
+                                            assetsList.add(new Assets(jsonObject.getString(AppConfigTags.ASSET_BARCODE),jsonObject.getString(AppConfigTags.ASSET_STATUS)));
+
+                                        }
+                                        assetsAdapter.notifyDataSetChanged();
                                         scanItem= jsonArrayAsset.length();
                                         tvNoOfItemsScan.setText("Item Scanned : "+scanItem);
                                         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
