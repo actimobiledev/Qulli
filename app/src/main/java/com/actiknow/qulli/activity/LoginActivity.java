@@ -42,7 +42,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
-
 public class LoginActivity extends AppCompatActivity {
     TextView tvUsername;
     EditText etUserName;
@@ -61,12 +60,10 @@ public class LoginActivity extends AppCompatActivity {
         initView();
         initData();
         initListener();
-
     }
     private void initData() {
         userDetailsPref = UserDetailsPref.getInstance();
         progressDialog = new ProgressDialog(LoginActivity.this);
-
     }
     private void initView() {
         clMain = (CoordinatorLayout) findViewById(R.id.clMain);

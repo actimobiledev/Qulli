@@ -80,9 +80,7 @@ public class BookingDetailFragment extends DialogFragment {
     private Barcode barcodeResult;
     AssetsAdapter assetsAdapter;
     RecyclerView rvAssetList;
-
     List<Assets> assetsList = new ArrayList<>();
-
     public BookingDetailFragment newInstance(String response, int booking_id) {
         BookingDetailFragment f = new BookingDetailFragment();
         Bundle args = new Bundle();
@@ -91,13 +89,11 @@ public class BookingDetailFragment extends DialogFragment {
         f.setArguments(args);
         return f;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme);
     }
-
     @Override
     public void onActivityCreated(Bundle arg0) {
         super.onActivityCreated(arg0);
@@ -105,7 +101,6 @@ public class BookingDetailFragment extends DialogFragment {
         window.getAttributes().windowAnimations = R.style.DialogAnimation;
 
     }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -126,7 +121,6 @@ public class BookingDetailFragment extends DialogFragment {
             }
         });
     }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -137,8 +131,9 @@ public class BookingDetailFragment extends DialogFragment {
             d.getWindow().setLayout(width, height);
         }
     }
-
     @Override
+
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.dialog_fragment_booking_detail, container, false);
         initView(root);
@@ -149,8 +144,6 @@ public class BookingDetailFragment extends DialogFragment {
         setData();
         return root;
     }
-
-
     private void initView(View root) {
         tvTitle = (TextView) root.findViewById(R.id.tvTitle);
         tvBookingId = (TextView) root.findViewById(R.id.tvBookingId);
@@ -174,18 +167,15 @@ public class BookingDetailFragment extends DialogFragment {
         ivCancel = (ImageView) root.findViewById (R.id.ivCancel);
         rvAssetList=(RecyclerView)root.findViewById(R.id.rvBarcodeValueList);
     }
-
     private void initBundle() {
         Bundle bundle = this.getArguments();
         booking_id = bundle.getInt(AppConfigTags.BOOKING_ID);
         arrayResponse = bundle.getString("arrayResponse");
     }
-
     private void initData() {
         Utils.setTypefaceToAllViews(getActivity(), tvTitle);
         progressDialog=new ProgressDialog(getActivity());
     }
-
     private void initAdapter() {
         assetsAdapter = new AssetsAdapter(getActivity(), assetsList);
         rvAssetList.setAdapter(assetsAdapter);
@@ -195,10 +185,7 @@ public class BookingDetailFragment extends DialogFragment {
         rvAssetList.setItemAnimator (new DefaultItemAnimator ());
         rvAssetList.addItemDecoration (new RecyclerViewMargin ((int) Utils.pxFromDp (getActivity(), 16), (int) Utils.pxFromDp (getActivity(), 16), (int) Utils.pxFromDp (getActivity(), 16), (int) Utils.pxFromDp (getActivity(), 16), 2, 0, RecyclerViewMargin.LAYOUT_MANAGER_GRID, RecyclerViewMargin.ORIENTATION_VERTICAL));
     }
-
     private void initListener() {
-
-
         tvScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -235,7 +222,6 @@ public class BookingDetailFragment extends DialogFragment {
             }
         });
     }
-
     private void setData() {
         try {
             JSONObject jsonObj = new JSONObject(arrayResponse);
@@ -264,7 +250,6 @@ public class BookingDetailFragment extends DialogFragment {
                     for (int j=0; j<jsonArrayAsset.length();j++){
                         JSONObject jsonObject=jsonArrayAsset.getJSONObject(j);
                         assetsList.add(new Assets(jsonObject.getString(AppConfigTags.ASSET_BARCODE),jsonObject.getString(AppConfigTags.ASSET_STATUS)));
-
                     }
                     assetsAdapter.notifyDataSetChanged();
 
@@ -278,7 +263,6 @@ public class BookingDetailFragment extends DialogFragment {
         }
 
     }
-
     private void addAssetValue (final String barcode, final int booking_id) {
         if (NetworkConnection.isNetworkAvailable (getActivity())) {
             Utils.showLog (Log.INFO, "" + AppConfigTags.URL, AppConfigURL.ADD_ASSET, true);

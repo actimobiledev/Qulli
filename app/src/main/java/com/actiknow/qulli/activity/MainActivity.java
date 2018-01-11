@@ -203,14 +203,12 @@ public class MainActivity extends AppCompatActivity {
                             if (response != null) {
                                 userDetailsPref.putStringPref(MainActivity.this, UserDetailsPref.RESPONSE, response);
                                 try {
-
                                     JSONObject jsonObj = new JSONObject(response);
                                     boolean is_error = jsonObj.getBoolean(AppConfigTags.ERROR);
                                     String message = jsonObj.getString(AppConfigTags.MESSAGE);
                                     if (!is_error) {
                                         swipeRefreshLayout.setRefreshing(false);
                                         JSONArray jsonArrayBooking = jsonObj.getJSONArray(AppConfigTags.BOOKINGS);
-
                                         for (int i = 0; i < jsonArrayBooking.length(); i++) {
                                             JSONObject jsonObjectBooking = jsonArrayBooking.getJSONObject(i);
                                             Booking booking = new Booking(
