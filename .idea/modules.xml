@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Qulli.iml" filepath="$PROJECT_DIR$/Qulli.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/qulli.iml" filepath="$PROJECT_DIR$/qulli.iml" />
       <module fileurl="file://E:\Actiknow All Project\FoodCorner\Rahul\Qulli\.idea\qulli.iml" filepath="E:\Actiknow All Project\FoodCorner\Rahul\Qulli\.idea\qulli.iml" />
     </modules>
   </component>

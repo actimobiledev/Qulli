@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
                                         for (int i = 0; i < jsonArrayBooking.length(); i++) {
                                             JSONObject jsonObjectBooking = jsonArrayBooking.getJSONObject(i);
                                             Booking booking = new Booking(
-                                                    jsonObjectBooking.getInt(AppConfigTags.BOOKING_ID),
+                                                    jsonObjectBooking.getString (AppConfigTags.BOOKING_ID),
                                                     jsonObjectBooking.getString(AppConfigTags.BOOKING_STATUS),
                                                     jsonObjectBooking.getString(AppConfigTags.CLIENT_NAME),
                                                     jsonObjectBooking.getString(AppConfigTags.CLIENT_EMAIL),
@@ -304,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < jsonArrayBooking.length(); i++) {
                     JSONObject jsonObjectBooking = jsonArrayBooking.getJSONObject(i);
                     Booking booking = new Booking(
-                            jsonObjectBooking.getInt(AppConfigTags.BOOKING_ID),
+                            jsonObjectBooking.getString (AppConfigTags.BOOKING_ID),
                             jsonObjectBooking.getString(AppConfigTags.BOOKING_STATUS),
                             jsonObjectBooking.getString(AppConfigTags.CLIENT_NAME),
                             jsonObjectBooking.getString(AppConfigTags.CLIENT_EMAIL),

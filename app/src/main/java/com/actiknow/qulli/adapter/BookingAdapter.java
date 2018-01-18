@@ -1,11 +1,7 @@
 package com.actiknow.qulli.adapter;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.provider.Settings;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actiknow.qulli.R;
-import com.actiknow.qulli.activity.LoginActivity;
-import com.actiknow.qulli.activity.MainActivity;
 import com.actiknow.qulli.model.Booking;
 import com.actiknow.qulli.utils.AppConfigTags;
 import com.actiknow.qulli.utils.AppConfigURL;
@@ -45,11 +39,10 @@ import java.util.Map;
 
 public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHolder> {
     OnItemClickListener mItemClickListener;
-
-    private Activity activity;
-    private List<Booking> bookingList = new ArrayList<Booking>();
     int scanItem;
     ProgressBar progressDialog;
+    private Activity activity;
+    private List<Booking> bookingList = new ArrayList<Booking> ();
     private Barcode barcodeResult;
 
     public BookingAdapter(Activity activity, List<Booking> bookingList) {
@@ -119,7 +112,8 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
         }
 
     }
-    private void addAssetValue (final String barcode, final int booking_id) {
+    
+    private void addAssetValue (final String barcode, final String booking_id) {
         if (NetworkConnection.isNetworkAvailable (activity)) {
             Utils.showLog (Log.INFO, "" + AppConfigTags.URL, AppConfigURL.ADD_ASSET, true);
             StringRequest strRequest1 = new StringRequest (Request.Method.POST, AppConfigURL.ADD_ASSET,
@@ -159,7 +153,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
                 protected Map<String, String> getParams () throws AuthFailureError {
                     Map<String, String> params = new Hashtable<String, String>();
                     params.put (AppConfigTags.BARCODE_VALUE, barcode);
-                    params.put (AppConfigTags.BOOKING_ID, String.valueOf(booking_id));
+                    params.put (AppConfigTags.BOOKING_ID, booking_id);
                     Utils.showLog (Log.INFO, AppConfigTags.PARAMETERS_SENT_TO_THE_SERVER, "" + params, true);
                     return params;
                 }

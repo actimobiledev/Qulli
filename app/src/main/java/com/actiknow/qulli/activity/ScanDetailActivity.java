@@ -42,7 +42,7 @@ public class ScanDetailActivity extends AppCompatActivity {
     UserDetailsPref userDetailsPref;
     List<BookingStatus> bookingStatusList = new ArrayList<>();
     int status_id = 0;
-    int booking_id = 0;
+    String booking_id;
     TextView tvBookingId;
     TextView tvBookingStatus;
     TextView tvClientName;
@@ -123,19 +123,9 @@ public class ScanDetailActivity extends AppCompatActivity {
                     bookingStatusList.add(bookingStatus);
                 }
                 attribute_id = jsonObj.getInt(AppConfigTags.ATTRIBUTE_ID);
-                booking_id = jsonObj.getInt(AppConfigTags.BOOKING_ID);
-                tvBookingId.setText("Booking Id :" + jsonObj.getInt(AppConfigTags.BOOKING_ID));
-                tvBookingStatus.setText(jsonObj.getString(AppConfigTags.BOOKING_STATUS));
-                tvClientName.setText(jsonObj.getString(AppConfigTags.CLIENT_NAME));
-                tvEmail.setText(jsonObj.getString(AppConfigTags.CLIENT_EMAIL));
-                tvPhone.setText(jsonObj.getString(AppConfigTags.CLIENT_PHONE));
-                tvPickUpAddress.setText(jsonObj.getString(AppConfigTags.PICKUP_LOCATION));
-                tvPickUpDate.setText(jsonObj.getString(AppConfigTags.PICKUP_DATE));
-                tvPickuptime.setText(jsonObj.getString(AppConfigTags.PICKUP_TIME_START));
-                tvDropUpDate.setText(jsonObj.getString(AppConfigTags.DROP_DATE));
-                tvDropuptime.setText(jsonObj.getString(AppConfigTags.DROP_TIME_START));
-
-                tvBookingId.setText("Booking Id : " + jsonObj.getInt(AppConfigTags.BOOKING_ID));
+                booking_id = jsonObj.getString (AppConfigTags.BOOKING_ID);
+    
+                tvBookingId.setText ("Booking Id :" + jsonObj.getString (AppConfigTags.BOOKING_ID));
                 tvBookingStatus.setText("Current Status : " + jsonObj.getString(AppConfigTags.BOOKING_STATUS));
                 tvClientName.setText("Name : " + jsonObj.getString(AppConfigTags.CLIENT_NAME));
                 tvEmail.setText("Email : " + jsonObj.getString(AppConfigTags.CLIENT_EMAIL));
@@ -228,8 +218,8 @@ public class ScanDetailActivity extends AppCompatActivity {
                                                 .positiveColor(getResources().getColor(R.color.primary_text))
                                                 .contentColor(getResources().getColor(R.color.primary_text))
                                                 .negativeColor(getResources().getColor(R.color.primary_text))
-                                                .canceledOnTouchOutside(true)
-                                                .cancelable(true)
+                                                .canceledOnTouchOutside (false)
+                                                .cancelable (false)
                                                 .positiveText("OK")
                                                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                                                     @Override
@@ -270,7 +260,7 @@ public class ScanDetailActivity extends AppCompatActivity {
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new Hashtable<String, String>();
-                    params.put(AppConfigTags.BOOKING_ID, String.valueOf(booking_id));
+                    params.put (AppConfigTags.BOOKING_ID, booking_id);
                     params.put(AppConfigTags.STATUS_ID, String.valueOf(status_id));
                     params.put(AppConfigTags.ATTRIBUTE_ID, String.valueOf(attribute_id));
 

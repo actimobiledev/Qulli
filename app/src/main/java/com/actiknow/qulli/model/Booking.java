@@ -5,16 +5,16 @@ package com.actiknow.qulli.model;
  */
 
 public class Booking {
-    int booking_id, number_of_item;
-    String booking_status,client_name,client_email,client_phone,
+    int number_of_item;
+    String booking_id, booking_status, client_name, client_email, client_phone,
     pickup_date, pickup_address, pickup_time_start, pickup_time_end, drop_address, drop_date, drop_time_start,
     drop_time_end,notes,cost,asset;
-
-
-    public Booking(int booking_id, String booking_status, String client_name, String client_email, String client_phone,
-                   String pickup_address, String pickup_date, String pickup_time_start, String pickup_time_end,
-                   String drop_address, String drop_date, String drop_time_start, String drop_time_end,int number_of_item,
-                   String notes, String cost, String asset) {
+    
+    
+    public Booking (String booking_id, String booking_status, String client_name, String client_email, String client_phone,
+                    String pickup_address, String pickup_date, String pickup_time_start, String pickup_time_end,
+                    String drop_address, String drop_date, String drop_time_start, String drop_time_end, int number_of_item,
+                    String notes, String cost, String asset) {
         this.booking_id = booking_id;
         this.booking_status = booking_status;
         this.client_name = client_name;
@@ -33,6 +33,9 @@ public class Booking {
         this.cost = cost;
         this.asset = asset;
     }
+    
+    public Booking () {
+    }
 
     public String getAsset() {
         return asset;
@@ -41,18 +44,15 @@ public class Booking {
     public void setAsset(String asset) {
         this.asset = asset;
     }
-
-    public Booking() {
-    }
-
-    public int getBooking_id() {
+    
+    public String getBooking_id () {
         return booking_id;
     }
-
-    public void setBooking_id(int booking_id) {
+    
+    public void setBooking_id (String booking_id) {
         this.booking_id = booking_id;
     }
-
+    
     public String getBooking_status() {
         return booking_status;
     }
